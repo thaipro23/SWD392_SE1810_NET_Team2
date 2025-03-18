@@ -1,6 +1,3 @@
-# Kindergarten Suggestion
-
-This project provides a solution for kindergarten suggestions, allowing users to search and evaluate schools.
 
 ## Pre-requisites
 
@@ -16,12 +13,6 @@ Before building the project, make sure you have the following installed:
 
 1. **Install Git**: Download Git from the [Git website](https://git-scm.com/downloads) and install it.
 
-2. **Clone the repository:**
-
-   ```bash
-   git clone https://gitlab.com/anhnnhe176642/kindergarten-suggestion.git
-   cd Kindergarten-Suggestion
-   ```
 
 ## Building the Project
 
