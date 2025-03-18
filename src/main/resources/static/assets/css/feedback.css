@@ -1,0 +1,51 @@
+.breadcrumb-item+.breadcrumb-item::before {
+    content: ">";
+}
+
+.full-star {
+    color: #ffc107;
+    font-size: 18px;
+}
+
+.empty-star {
+    color: #dee2e6;
+    font-size: 18px;
+}
+
+.half-star {
+    background: linear-gradient(90deg, #ffc107 50%, #dee2e6 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    font-size: 18px;
+}
+
+.feedback-item {
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 0;
+}
+
+.section-title {
+    color: #566a7f;
+    border-bottom: 2px solid #566a7f;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feedback-item.new {
+    animation: fadeIn 0.5s ease-out forwards;
+}

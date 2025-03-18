@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+xmlns:th="https://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+
+<head th:replace="~{layouts/base::head}">
+
+</head>
+
+<style>
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: ">";
+    }
+    .modal-header {
+    position: relative; 
+}
+
+.btn-close {
+    position: absolute; 
+    top: 50px; 
+    right: 40px; 
+}
+</style>
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside th:replace="~{components/sidebar::sidebar}"></aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          <div th:replace="~{components/header::header}"></div>
+
+          <!-- / Navbar -->
+            <div class="card-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/school-owner/schools/request" class="breadcrumb-item active text-primary">Request Management</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/school-owner/schools/request" class="breadcrumb-item active text-primary">Request List</a>
+                        </li>
+                        <li class="breadcrumb-item active text-primary" aria-current="page">Request Details</li>
+                    </ol>
+                </nav>
+            </div>
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+                    <div class="col-xl-8 mx-auto m-3"> <!-- Center the content horizontally -->
+                        <!-- HTML5 Inputs -->
+                        <div class="mb-3 row">
+                            <div class="card mb-4">
+                                <div class="d-flex">
+                                    <div><h4 class="card-header mb-0">Request Details</h4></div>
+                                    <div><span
+                                        th:class="'badge me-1 rounded-pill mt-4 ' + (${request.status.name()} == 'CLOSED' ? 'bg-label-success' : 'bg-label-secondary')"
+                                        style="width: 90px;"
+                                        th:text="${request.status.name()}">
+                                    </span></div></div>
+                                    
+                                    
+                                <form id="requestForm" th:action="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/request/detail/' + ${request.id} + '/edit'}" method="post">
+                                <div class="card-body">
+                                    <div>
+                                        <input class="form-control bg-light" type="text" th:value="${request.id}"
+                                                id="html5-text-input" name="id" style="display:none">
+                                    </div>
+                                    <!-- Input fields -->
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-3 col-form-label">Full Name</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control bg-light" type="text" th:value="${request.fullname}"
+                                                id="html5-text-input" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-3 col-form-label">Email</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control bg-light" type="text" th:value="${request.email}"
+                                                id="html5-text-input" readonly /> 
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-3 col-form-label">Phone No.</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control bg-light" type="text" th:value="${request.phone}"
+                                                id="html5-text-input" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-3 col-form-label">Address</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control bg-light" type="text" th:value="${request.parent.address}"
+                                                id="html5-text-input" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-3 col-form-label">Requested School</label>
+                                        <div class="col-md-9">
+                                            <input class="form-control bg-light" type="text" th:value="${request.school.name}"
+                                                id="html5-text-input" readonly /> 
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-3 col-form-label">Inquires</label>
+                                        <div class="col-md-9">
+                                            <textarea class="form-control bg-light" id="inquiry" rows="3" th:text="${request.inquiry}" readonly></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 d-flex justify-content-end" th:if="${request.status.name()} != 'CLOSED'">
+                                        <button type="button" class="btn btn-primary mark-resolved" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            Mark request resolved
+                                          </button>
+                                    </div>
+                                    <!-- Add the rest of your input fields here -->
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                        <!-- / Content -->
+                    </div>
+                </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Mark request resolved</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to mark this request resolved?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No. Take me back!</button>
+                          <button type="button" class="btn btn-primary yes-button">Yes</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+
+                <!-- Footer -->
+                <footer th:replace="~{components/footer::footer}"></footer>
+                <!-- / Footer -->
+            </div>
+        </div>
+    </div>
+    <!-- / Layout wrapper -->
+</body>
+<script>
+    // Get the modal
+    var modal = document.getElementById("exampleModal");
+
+    // Get the button that opens the modal
+    var markResolvedButton = document.querySelector(".mark-resolved");
+
+    // Get the yes button
+    var yesButton = document.querySelector(".yes-button");
+
+    // Get the form element
+    var form = document.getElementById("requestForm");
+
+    // When the user clicks the button, open the modal
+    markResolvedButton.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks the "Yes" button, mark the request as resolved
+    yesButton.onclick = function () {
+        // Submit the form
+        form.submit();
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+
+
+
+</html>

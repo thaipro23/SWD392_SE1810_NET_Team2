@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+xmlns:th="https://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head th:replace="~{layouts/base::head}"></head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside th:replace="~{components/sidebar::sidebar}"></aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          <div th:replace="~{components/header::header}"></div>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <!-- Layout Demo -->
+              <div class="layout-demo-wrapper">
+                <div class="layout-demo-placeholder">
+                  <img
+                    src="/assets/img/layouts/layout-container-light.png"
+                    class="img-fluid"
+                    alt="Layout container"
+                    data-app-light-img="layouts/layout-container-light.png"
+                    data-app-dark-img="layouts/layout-container-dark.png"
+                  />
+                </div>
+                <div class="layout-demo-info">
+                  <h4>example</h4>
+                  <p>Container layout sets a <code>max-width</code> at each responsive breakpoint.</p>
+                </div>
+              </div>
+              <!--/ Layout Demo -->
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+            <footer th:replace="~{components/footer::footer}"></footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+  </body>
+</html>

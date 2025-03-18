@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head th:replace="~{layouts/base::head}"></head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside th:replace="~{components/sidebar::sidebar}"></aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="card layout-page">
+          <!-- Navbar -->
+
+          <div th:replace="~{components/header::header}"></div>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <h4 class="fw-bold py-3 mb-4" style="color: #696cff !important">
+                <a
+                  style="color: #696cff !important"
+                  class="text-muted fw-light"
+                  href="#"
+                  >School Management ></a
+                >
+                <a
+                  style="color: #696cff !important"
+                  class="text-muted fw-light"
+                  th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools'}"
+                  >School List ></a
+                >
+                School detail
+              </h4>
+
+              <div class="row">
+                <div class="col d-flex justify-content-end">
+                  <a
+                    th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/detail/' + ${school.id} + '/rating'}"
+                    >View rating and feedback</a
+                  >
+                </div>
+                <div class="d-flex">
+                  <div><h4 class="card-header mb-0">School Details</h4></div>
+                  <div>
+                    <span
+                      class="badge me-1 rounded-pill mt-4 bg-label-secondary"
+                      style="width: 100px"
+                      th:text="${school.status.name()}"
+                    >
+                    </span>
+                  </div>
+                </div>
+                <!-- Basic Layout & Basic with Icons -->
+                <div class="row justify-content-center">
+                  <div class="mb-4">
+                    <div class="card-body">
+                      <p class="text-success" th:text="${successMessage}"></p>
+                      <div th:object="${school}">
+                        <!-- School Name -->
+                        <div class="row mb-3">
+                          <label
+                            class="col-sm-2 col-form-label"
+                            for="school-name"
+                            >School Name</label
+                          >
+                          <div class="col-sm-6">
+                            <input
+                              readonly
+                              type="text"
+                              class="form-control bg-light"
+                              id="school-name"
+                              th:field="*{name}"
+                              placeholder="School Name"
+                            />
+                          </div>
+                        </div>
+
+                        <!-- School Type -->
+                        <div class="row mb-3">
+                          <label
+                            class="col-sm-2 col-form-label"
+                            for="school-type"
+                            >School Type</label
+                          >
+                          <div class="col-sm-6">
+                            <select
+                              class="form-select"
+                              th:field="*{schoolType}"
+                              id="child-receiving-age"
+                            >
+                              <option
+                                th:value="${school.schoolType.id}"
+                                th:text="${school.schoolType.name}"
+                              ></option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="address"
+                            >Address</label
+                          >
+                          <div class="col-sm-6">
+                            <input
+                              readonly
+                              type="text"
+                              class="form-control mb-2 bg-light bg-light"
+                              id="address"
+                              th:field="*{Address.detail}"
+                              placeholder="School Address"
+                            />
+                            <input
+                              readonly
+                              type="text"
+                              class="form-control mb-2 bg-light bg-light"
+                              id="address"
+                              th:field="*{Address.wards.name}"
+                              placeholder="School Address"
+                            />
+                            <input
+                              readonly
+                              type="text"
+                              class="form-control mb-2 bg-light bg-light"
+                              id="address"
+                              th:field="*{Address.district.name}"
+                              placeholder="School Address"
+                            />
+                            <input
+                              readonly
+                              type="text"
+                              class="form-control mb-2 bg-light bg-light"
+                              id="address"
+                              th:field="*{Address.province.name}"
+                              placeholder="School Address"
+                            />
+                          </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="email"
+                            >Email</label
+                          >
+                          <div class="col-sm-6">
+                            <input
+                              readonly
+                              type="email"
+                              class="form-control bg-light"
+                              id="email"
+                              th:field="*{email}"
+                              placeholder="School Email"
+                            />
+                          </div>
+                        </div>
+
+                        <!-- Phone No -->
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="phone"
+                            >Phone No.</label
+                          >
+                          <div class="col-sm-6">
+                            <input
+                              readonly
+                              type="text"
+                              class="form-control bg-light"
+                              id="phone"
+                              th:field="*{phone}"
+                              placeholder="phone number"
+                            />
+                          </div>
+                        </div>
+
+                        <!-- Child Receiving Age -->
+                        <div class="row mb-3">
+                          <label
+                            class="col-sm-2 col-form-label"
+                            for="child-receiving-age"
+                            >Child-receiving age</label
+                          >
+                          <div class="col-sm-6">
+                            <select
+                              class="form-select"
+                              th:field="*{childAge}"
+                              id="child-receiving-age"
+                            >
+                              <option
+                                th:value="${school.childAge.id}"
+                                th:text="${school.childAge.name}"
+                              ></option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <!-- Education Method -->
+                        <div class="row mb-3">
+                          <label
+                            class="col-sm-2 col-form-label"
+                            for="education-method"
+                            >Education method</label
+                          >
+                          <div class="col-sm-6">
+                            <select
+                              class="form-select"
+                              th:field="*{educationMethod}"
+                              id="education-method"
+                            >
+                              <option
+                                th:value="${school.educationMethod.id}"
+                                th:text="${school.educationMethod.name}"
+                              ></option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <!-- Fee/Month -->
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label"
+                            >Fee/month (VND)</label
+                          >
+                          <div class="col-sm-6">
+                            <div class="row">
+                              <div class="col-sm-2 pe-0 ps-4">
+                                <label class="col-form-label">From</label>
+                              </div>
+                              <div class="col-sm-4">
+                                <input
+                                  type="text"
+                                  th:field="*{feeFrom}"
+                                  class="form-control"
+                                  placeholder="From"
+                                  required
+                                />
+                              </div>
+                              <div class="col-sm-2 pe-0 ps-4">
+                                <label class="col-form-label">To</label>
+                              </div>
+                              <div class="col-sm-4">
+                                <input
+                                  type="text"
+                                  th:field="*{feeTo}"
+                                  class="form-control"
+                                  placeholder="To"
+                                  required
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Facilities -->
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label"
+                            >Facilities</label
+                          >
+                          <div class="col-sm-10">
+                            <div class="row">
+                              <div
+                                th:each="facility : ${facilities}"
+                                class="col-sm-4"
+                              >
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    disabled
+                                    th:field="*{facilities}"
+                                    th:value="${facility.id}"
+                                    th:checked="${facilities.contains(facility)}"
+                                    th:id="${facility.name}"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    th:for="${facility.name}"
+                                    th:text="${facility.name}"
+                                  ></label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Utilities -->
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label"
+                            >Utilities</label
+                          >
+                          <div class="col-sm-10">
+                            <div class="row">
+                              <div th:each="u : ${utilities}" class="col-sm-4">
+                                <div class="form-check form-check-inline">
+                                  <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    disabled
+                                    th:field="*{utilities}"
+                                    th:value="${u.id}"
+                                    th:checked="${utilities.contains(u)}"
+                                    th:id="${u.name}"
+                                  />
+                                  <label
+                                    class="form-check-label"
+                                    th:for="${u.name}"
+                                    th:text="${u.name}"
+                                  ></label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- School Introduction -->
+                        <div class="row mb-3">
+                          <label
+                            class="col-sm-2 col-form-label"
+                            for="school-introduction"
+                            >School Introduction</label
+                          >
+                          <div class="col-sm-10">
+                            <div
+                              class="form-control border ck-content"
+                              style="max-height: 200px; overflow-y: auto"
+                              th:utext="${school.description}"
+                            ></div>
+                          </div>
+                        </div>
+                        <style>
+                          .thumbnail {
+                            cursor: pointer;
+                            transition: opacity 0.3s;
+                            aspect-ratio: 16 / 9;
+                            object-fit: cover;
+                            outline: 2px solid rgb(0, 191, 255);
+                            outline-offset: -2px;
+                          }
+                        </style>
+                        <!-- School Image -->
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label"
+                            >School Image</label
+                          >
+                          <div class="col-sm-10">
+                            <div class="row">
+                              <div
+                                th:each="image : ${school.images}"
+                                class="col-sm-4"
+                              >
+                                <img
+                                  th:src="${image.url}"
+                                  class="img-fluid mb-3 thumbnail"
+                                  alt="School Image"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="row">
+                          <div class="col d-flex justify-content-end">
+                            <button
+                              th:if="${!(school.status.name() == 'APPROVED' && currentUser.role.name == 'SCHOOL_OWNER')}"
+                              type="button"
+                              class="btn btn-danger me-2"
+                              data-bs-toggle="modal"
+                              data-bs-target="#deleteModal"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              th:if="${school.status.name() != 'REJECTED'}"
+                              type="button"
+                              class="btn btn-primary me-2"
+                              th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/detail/' + ${school.id} + '/edit'}"
+                              onclick="window.location.href=this.getAttribute('href')"
+                            >
+                              Edit
+                            </button>
+                            <!-- reject button -->
+                            <button
+                              th:if="${school.status.name() == 'SUBMITTED' && currentUser.role.name == 'ADMIN'}"
+                              th:data-url="@{/admin/schools/detail/{id}/reject(id=${school.id})}"
+                              type="button"
+                              class="btn btn-danger action-button me-2"
+                              data-title="Reject School"
+                              data-message="Are you sure you want continue?"
+                            >
+                              Reject
+                            </button>
+                            <!-- end reject button -->
+                            <button
+                              th:if="${school.status.name() == 'SAVED' && currentUser.role.name == 'SCHOOL_OWNER'}"
+                              th:data-url="@{/school-owner/schools/detail/{id}/submit(id=${school.id})}"
+                              type="button"
+                              class="btn btn-primary action-button me-2"
+                              data-title="Submit School"
+                              data-message="Are you sure you want to submit this school?"
+                            >
+                              Submit
+                            </button>
+                            <button
+                              th:if="${school.status.name() == 'SUBMITTED' && currentUser.role.name == 'ADMIN'}"
+                              th:data-url="@{/admin/schools/detail/{id}/approve(id=${school.id})}"
+                              type="button"
+                              class="btn btn-primary action-button me-2"
+                              data-title="Approve School"
+                              data-message="Are you sure you want continue?"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              th:if="${school.status.name() == 'APPROVED' || school.status.name() == 'UNPUBLISHED'}"
+                              th:data-url="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/detail/' + ${school.id} + '/publish'}"
+                              type="button"
+                              class="btn btn-primary action-button me-2"
+                              data-title="Publish School"
+                              data-message="Are you sure you want to publish this school?"
+                            >
+                              Publish
+                            </button>
+                            <button
+                              th:if="${school.status.name() == 'PUBLISHED'}"
+                              th:data-url="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/detail/' + ${school.id} + '/unpublish'}"
+                              type="button"
+                              class="btn btn-outline-primary action-button me-2"
+                              data-title="Unpublish School"
+                              data-message="Are you sure you want unpublish this school?"
+                            >
+                              Unpublish
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- / Content -->
+
+            
+            <!-- Delete User Modal -->
+            <div
+              class="modal fade"
+              id="deleteModal"
+              tabindex="-1"
+              aria-labelledby="deleteUserModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content">
+                  <div class="card-body">
+                    <!-- Logo -->
+                    <div class="app-brand justify-content-center">
+                      <br />
+                    </div>
+                    <!-- /Logo -->
+                    <div class="text-center">
+                      <h4 class="mb-2">
+                        <i class="bx bx-trash me-2" style="color: red"></i
+                        >Delete School
+                      </h4>
+                      <p class="mb-4">Are you sure you want to continue?</p>
+                      <p class="mb-4" style="color: red; font-size: 14px">
+                        This action is permanent and cannot be undone!
+                      </p>
+                      <div
+                        class="d-flex justify-content-around align-items-center mb-3"
+                      >
+                        <a
+                          href="javascript:void(0);"
+                          class="d-flex align-items-center ms-1"
+                          data-bs-dismiss="modal"
+                        >
+                          <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                          <span class="ms-1">Cancel</span>
+                        </a>
+                        <button
+                          type="button"
+                          id="confirmDeleteSchool"
+                          class="w-50 btn btn-danger"
+                          th:data-url="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/detail/' + ${school.id} + '/delete'}"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div th:replace="~{pop-up/confirm-popup:: confirm-modal}"></div>
+            <!-- Footer -->
+            <footer th:replace="~{components/footer::footer}"></footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- / Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+      </div>
+    </div>
+    <!-- / Layout wrapper -->
+    <script src="/assets/js/confirm-approve-reject-publish-unpublish-school.js"></script>
+    <script src="/assets/js/replace-oembed.js"></script>
+  </body>
+</html>

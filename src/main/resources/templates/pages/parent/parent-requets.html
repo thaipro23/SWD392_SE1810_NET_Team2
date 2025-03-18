@@ -1,0 +1,260 @@
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed" dir="ltr"
+    data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
+
+<head th:replace="~{layouts/base::head}">
+
+</head>
+<style>
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: ">";
+    }
+
+    .full-star {
+        color: gold;
+    }
+
+    .empty-star {
+        color: #d3d3d3;
+    }
+
+    .half-star {
+        background: linear-gradient(90deg, gold 50%, #d3d3d3 50%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+    }
+
+    /* .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+    } */
+</style>
+
+<body>
+    <!-- Layout wrapper -->
+    <div>
+        <div>
+            <div th:replace="~{components/header-parent::header}"></div>
+            <div>
+                <div class="card-header " style="margin-left: 8%;">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="#" class="breadcrumb-item active text-primary">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active text-primary" aria-current="page">My Requests</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="container-fluid">
+                    <div class=" row">
+                        <!-- Content -->
+                        <div class="col-xl-10 mx-auto m-2"> <!-- Center the content horizontally -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <!-- User Detail -->
+                                <div th:if="${count > 0}">
+                                    <h3>My Requests</h3>
+                                    <h5 th:text="'You have ' + ${count} + ' open request(s)'"></h5>
+                                </div>
+                                <div th:if="${message}">
+                                    <h3>My Requests</h3>
+                                    <h5 th:text="${message}"></h5>
+                                </div>
+                            </div>
+                            <!-- Two-column layout with 7:3 ratio -->
+                            <div class="row" th:each="myRequest : ${myRequest}">
+                                <div class="col-lg-7">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <div class="d-flex">
+                                                        <h5 class="text-primary text-decoration-underline me-2">Request
+                                                            Number:</h5>
+                                                        <h5 th:text="'#'+${myRequest.counsellingRequest.id}"></h5>
+                                                    </div>
+                                                    <h5 class="text-primary text-decoration-underline">Request
+                                                        Information</h5>
+                                                </div>
+                                                <div>
+                                                    <p class="card-subtitle text-muted"
+                                                        th:text="${#temporals.format(myRequest.counsellingRequest.createdAt, 'dd-MM-yyyy HH:mm')}">
+                                                    </p>
+                                                    <span
+                                                        th:class="'badge me-1 rounded-pill ' + (${myRequest.counsellingRequest.status.name()} == 'OPEN' ? 'bg-label-success' : 'bg-label-secondary')"
+                                                        style="width: 120px;"
+                                                        th:text="${myRequest.counsellingRequest.status.name()}"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="">
+                                                <p class="mb-1"><strong>Full Name: </strong> <span
+                                                        th:text="${myRequest.counsellingRequest.fullname}"></span></p>
+                                                <p class="mb-1 "><strong>Email address: </strong>
+                                                    <span th:text="${myRequest.counsellingRequest.email}"></span>
+                                                </p>
+                                                <p class="mb-1 "><strong>Phone number: </strong><span
+                                                        th:text="${myRequest.counsellingRequest.phone}"></span></p>
+                                            </div>
+
+                                            <div>
+                                                <p class="mb-1"><strong>Inquiry:</strong></p>
+                                                <div class="d-flex">
+                                                    <p class="text-muted">
+                                                        <span
+                                                            th:if="${#strings.length(myRequest.counsellingRequest.inquiry) <= 80}"
+                                                            th:text="${myRequest.counsellingRequest.inquiry}"></span>
+                                                        <span
+                                                            th:if="${#strings.length(myRequest.counsellingRequest.inquiry) > 80}">
+                                                            <span class="truncated-text"
+                                                                th:text="${#strings.substring(myRequest.counsellingRequest.inquiry, 0, 80)} + '...'"></span>
+                                                            <span class="full-text d-none"
+                                                                th:text="${myRequest.counsellingRequest.inquiry}"></span>
+                                                        </span>
+                                                    </p>
+                                                    <a href="#" class="text-primary see-more-link"
+                                                        th:if="${#strings.length(myRequest.counsellingRequest.inquiry) > 80}"
+                                                        onclick="showFullInquiry(this); return false;">See more</a>
+                                                </div>
+                                            </div>
+                                            <small class="text-muted">Our staff will contact with you within 24 hrs. If
+                                                you
+                                                need urgent assistance, please contact us via our hotline <a href="#"
+                                                    class="text-primary">09123456888</a></small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- School Summary Card -->
+                                <div class="col-lg-5">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="card-body">
+                                            <p class="text-primary">School Summary</p>
+                                            <a
+                                                th:href="@{/parent/school-detail/{id}(id=${myRequest.counsellingRequest.school.id})}">
+                                                <h4 class="card-title text-primary text-decoration-underline"
+                                                    th:text="${myRequest.counsellingRequest.school.name}"></h4>
+                                            </a>
+                                            <div class="mb-3">
+                                                <p class="mb-2">
+                                                    <i class="fas fa-map-marker-alt"></i> Address:
+                                                    <span
+                                                        th:text="${myRequest.counsellingRequest.school.address}"></span>
+                                                </p>
+                                                <p class="mb-2">
+                                                    <i class="fa fa-globe"></i>
+                                                    Email: <a href="#" class="text-primary"><span
+                                                            th:text="${myRequest.counsellingRequest.school.email}"></span></a>
+                                                </p>
+                                                <p class="mb-2">
+                                                    <i class="fa fa-money-bill"></i> Tuition Fee:
+                                                    <span
+                                                        th:text="'From '+${myRequest.counsellingRequest.school.feeFrom }+' VND/Month'"></span>
+                                                </p>
+                                                <p class="mb-2">
+                                                    <i class="far fa-bookmark"></i> Admission age: <span
+                                                        th:text="${myRequest.counsellingRequest.school.childAge.name}+'ear'"></span>
+                                                </p>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="star-rating">
+                                                    <span th:each="i : ${#numbers.sequence(1, 5)}" class="fa fa-star"
+                                                        th:classappend="${i <= T(java.lang.Math).ceil(myRequest.rating*2)/2 ? 'full-star' : i < myRequest.rating+1 ? 'half-star' : 'empty-star'}">
+                                                    </span>
+                                                </span>
+                                                <span class="ms-2"
+                                                    th:with="roundedRating=${T(java.lang.Math).ceil(myRequest.rating * 2) / 2}"
+                                                    th:text="${roundedRating} + '/5 (' + ${myRequest.count} + ' ratings)'">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- phan trang -->
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center mt-4" th:if="${totalPages > 1}">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <!-- Nút Previous -->
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/parent/myRequest(page=${currentPage - 1})}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+
+                            <!-- Các số trang -->
+                            <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                <!-- Hiển thị trang đầu -->
+                                <li class="page-item" th:if="${i == 1}" th:classappend="${currentPage == i} ? 'active'">
+                                    <a class="page-link" th:href="@{/parent/myRequest(page=${i})}" th:text="${i}"></a>
+                                </li>
+
+                                <!-- Hiển thị dấu ... sau trang đầu -->
+                                <li class="page-item" th:if="${i == 2 && currentPage > 3}">
+                                    <a class="page-link">...</a>
+                                </li>
+
+                                <!-- Hiển thị trang hiện tại và các trang xung quanh -->
+                                <li class="page-item"
+                                    th:if="${i >= currentPage - 1 && i <= currentPage + 1 && i != 1 && i != totalPages}"
+                                    th:classappend="${currentPage == i} ? 'active'">
+                                    <a class="page-link" th:href="@{/parent/myRequest(page=${i})}" th:text="${i}"></a>
+                                </li>
+
+                                <!-- Hiển thị dấu ... trước trang cuối -->
+                                <li class="page-item" th:if="${i == totalPages - 1 && currentPage < totalPages - 2}">
+                                    <a class="page-link">...</a>
+                                </li>
+
+                                <!-- Hiển thị trang cuối -->
+                                <li class="page-item" th:if="${i == totalPages}"
+                                    th:classappend="${currentPage == i} ? 'active'">
+                                    <a class="page-link" th:href="@{/parent/myRequest(page=${i})}" th:text="${i}"></a>
+                                </li>
+                            </th:block>
+
+                            <!-- Nút Next -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{/parent/myRequest(page=${currentPage + 1})}"
+                                    aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- Footer -->
+                <!-- <footer th:replace="~{components/footer::footer}" class="footer mt-auto bg-light text-center py-3">
+                </footer> -->
+                <!-- / Footer -->
+            </div>
+        </div>
+    </div>
+    <!-- / Layout wrapper -->
+</body>
+<script>
+    function showFullInquiry(link) {
+        const container = link.parentElement; // Get the parent container
+        const truncatedText = container.querySelector('.truncated-text');
+        const fullText = container.querySelector('.full-text');
+
+        // Show the full text and hide the truncated text and "See more" link
+        if (fullText && truncatedText) {
+            fullText.classList.remove('d-none');
+            truncatedText.classList.add('d-none');
+        }
+        link.style.display = 'none'; // Hide the "See more" link
+    }
+</script>
+
+
+</html>

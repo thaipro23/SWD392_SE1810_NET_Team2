@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head th:replace="~{layouts/base::head}"></head>
+  <link rel="stylesheet" href="/assets/css/school-detail.css" />
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar layout-without-menu">
+      <div class="layout-container">
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          <div th:replace="~{components/header-parent::header}"></div>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <p class="fw-bold">
+                <a href="/homepage" class="text-muted fw-light">Home ></a>
+                <a href="/search" class="text-muted fw-light"
+                  >Search for school ></a
+                >
+                School details
+              </p>
+              <!-- Layout Demo -->
+              <div class="container text-center">
+                <div class="ratio ratio-21x9">
+                  <img
+                    th:src="${school.images.size() > 0 ? school.images[0].url : '/assets/img/backgrounds/no-image.jpg'}"
+                    alt="Main Image"
+                    id="mainImage"
+                    class="main-image"
+                  />
+                </div>
+                <!-- Thumbnail -->
+                <div class="thumbnail-container">
+                  <div class="thumbnail-wrapper">
+                    <div class="thumbnail-row">
+                      <div th:each="img, i :${school.images}" class="thumbnail-item">
+                        <img
+                          th:src="${img.url}"
+                          alt="Thumbnail 1"
+                          class="img-fluid thumbnail my-3"
+                          th:classappend="${i.index == 0 ? 'selected' : ''}"
+                          th:onclick="'changeImage('+${i.index}+')'"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Navigation buttons -->
+                <div class="navigation-buttons">
+                  <button class="nav-button" onclick="prevImage()">
+                    &#10094;
+                  </button>
+                  <span
+                    th:each="img, i :${school.images}"
+                    class="indicator"
+                    th:onclick="'changeImage('+${i.index}+')'"
+                  ></span>
+                  <button class="nav-button" onclick="nextImage()">
+                    &#10095;
+                  </button>
+                </div>
+              </div>
+
+              <!-- JavaScript -->
+              <script src="/assets/js/school-detail-img.js"></script>
+              <!-- School Card -->
+              <div class="col-xxl">
+                <div class="card rounded-3 shadow-sm border-primary">
+                  <div class="card-body p-4">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <h3>
+                          <strong th:text="${school.name}"></strong>
+                        </h3>
+                        <div class="row mb-2">
+                          <div class="col-md-3">
+                            <i class="menu-icon fa-light fa-location-dot"></i
+                            ><strong>Address:</strong>
+                          </div>
+                          <div
+                            class="col-md-9"
+                          >
+                          <span th:text="${school.address.detail}"></span><br>
+                          <span th:text="${school.address}"></span>
+                        </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-md-3">
+                            <i class="menu-icon fa-light fa-envelope"></i
+                            ><strong>Email:</strong>
+                          </div>
+                          <div class="col-md-9" th:text="${school.email}"></div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-md-3">
+                            <i class="menu-icon fa-light fa-phone"></i
+                            ><strong>Contact:</strong>
+                          </div>
+                          <div class="col-md-9" th:text="${school.phone}"></div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-md-3">
+                            <i class="menu-icon fa-light fa-earth-americas"></i
+                            ><strong>Website:</strong>
+                          </div>
+                          <div class="col-md-9">
+                            <a
+                              href="#"
+                              class="text-decoration-underline"
+                              style="color: #18a0fb"
+                              th:text="${school.email.substring(0, school.email.indexOf('@')) + '.edu.vn'}"
+                              >FortStreet.school.edu</a
+                            >
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-md-3">
+                            <i class="menu-icon fa-light fa-circle-dollar"></i
+                            ><strong>Tuition fee:</strong>
+                          </div>
+                          <div
+                            class="col-md-9"
+                            th:text="'From ' + ${#numbers.formatDecimal(school.feeFrom, 0, 'COMMA', 0, 'POINT')} + 'VND/month ' + 'To ' + ${#numbers.formatDecimal(school.feeTo, 0, 'COMMA', 0, 'POINT')} + 'VND/month'"
+                          >
+                            From 4,000,000 VND/month To 6,000,000 VND/month
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-md-3">
+                            <i
+                              class="menu-icon fa-light fa-circle-bookmark"
+                            ></i>
+                            <strong>Admission age:</strong>
+                          </div>
+                          <div
+                            class="col-md-9"
+                            th:with="range=${school.childAge.name}"
+                          >
+                            <div th:if="${range == '6m - 1y'}">
+                              From 6 months to 1 year
+                            </div>
+                            <div th:if="${range == '1-3y'}">
+                              From 1 year to 3 years
+                            </div>
+                            <div th:if="${range == '3-6y'}">
+                              From 3 years to 6 years
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-md-3">
+                            <i class="menu-icon fal fa-light fa-landmark"></i>
+                            <strong>School type:</strong>
+                          </div>
+                          <div
+                            class="col-md-9"
+                            th:text="${school.schoolType.name}"
+                          >
+                            Public
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="col-md-4 d-flex flex-column justify-content-between"
+                      >
+                        <div class="text-end">
+                          <div class="d-flex justify-content-end" th:if="${myEnrollment != null}">
+                            <button th:if="${myEnrollment.status.name() == 'UNENROLL'}" th:id="'requestCounseling' + ${school.id}"
+                              class="btn btn-primary request-counseling-btn my-2 mx-1" th:data-school-id="${school.id}"
+                              onclick="fetchUserInfo()">
+                              Request Counseling
+                            </button>
+                            <button th:if="${myEnrollment.status.name() == 'UNENROLL'}"
+                              class="btn btn-primary enroll-btn my-2" th:data-school-id="${school.id}"
+                              onclick="openEnrollModal(this)">
+                              Enroll Now
+                            </button>
+                            <button disabled th:if="${myEnrollment.status.name() == 'ENROLL'}"
+                              class="btn btn-primary enroll-btn my-2" th:data-school-id="${school.id}">
+                              Enrolled
+                            </button>
+                            <button th:if="${myEnrollment.status.name() == 'PENDING'}" class="btn btn-danger enroll-btn my-2"
+                              th:data-school-id="${school.id}" onclick="cancelEnrollModal(this)">
+                              Cancel request
+                            </button>
+                            <button disabled th:if="${myEnrollment.status.name() == 'CANCELLED'}"
+                              class="btn btn-primary enroll-btn my-2" th:data-school-id="${school.id}">
+                              You can not enroll to this school!
+                            </button>
+                          </div>
+                          <div class="d-flex justify-content-end" th:if="${myEnrollment == null}">
+                            <button th:id="'requestCounseling' + ${school.id}"
+                              class="btn btn-primary request-counseling-btn my-2 mx-1" th:data-school-id="${school.id}"
+                              onclick="fetchUserInfo()">
+                              Request Counseling
+                            </button>
+                          </div>
+                         <div>
+                          <button th:if="${IsUserAllowedToRate && !IsUserAlreadyHasRating}" 
+                          th:onclick="'openCreateRatingModal('+${school.id}+')'" 
+                                  class="btn btn-outline-primary px-4 rounded-sm w-50">
+                              Rate School
+                          </button>
+                          <button th:if="${IsUserAllowedToRate && IsUserAlreadyHasRating}" 
+                          th:onclick="'viewRatingDetails('+${school.id}+')'" 
+                                  class="btn btn-outline-primary px-4 rounded-sm w-50">
+                              View Rating Detail
+                          </button>
+                          <button th:if="${!IsUserAllowedToRate && IsUserAlreadyHasRating}" 
+                          th:onclick="'viewRatingDetails('+${school.id}+')'" 
+                                  class="btn btn-outline-primary px-4 rounded-sm w-50">
+                              View Rating Detail
+                          </button>
+                         </div>                 
+                          
+                        </div>
+                        <div class="text-warning mb-1 text-end">
+                          <span
+                            th:each="i : ${#numbers.sequence(1, 5)}"
+                            class="fas fa-star"
+                            th:classappend="${i <= T(java.lang.Math).ceil(school.rating*2)/2 ? 'full-star' : i < school.rating+1 ? 'half-star' : 'empty-star'}"
+                          >
+                          </span>
+                          <span
+                            class="text-dark ms-2"
+                            th:text="${T(java.lang.Math).ceil(school.rating*2)/2} + '/5 '+ ${'('+school.totalRatingCount + ' ratings'+')'}"
+                          ></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- School Card -->
+              <!-- tab -->
+              <div class="nav-align-top my-4">
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item">
+                    <button
+                      type="button"
+                      class="nav-link active"
+                      role="tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#navs-top-overview"
+                      aria-controls="navs-top-home"
+                      aria-selected="true"
+                    >
+                      Overview
+                    </button>
+                  </li>
+                  <li class="nav-item">
+                    <button
+                      type="button"
+                      class="nav-link"
+                      role="tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#navs-top-rating"
+                      aria-controls="navs-top-profile"
+                      aria-selected="false"
+                    >
+                      Ratings
+                    </button>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div
+                    class="tab-pane fade show active"
+                    id="navs-top-overview"
+                    role="tabpanel"
+                  >
+                    <h3>School Introduction</h3>
+                    <div class="ck-content mb-0" th:utext="${school.description}"></div>
+                    <h3 class="mt-4">Facilities</h3>
+                    <div class="col-sm-10">
+                      <div class="row">
+                        <div
+                          th:each="facility : ${facilities}"
+                          class="col-sm-4"
+                        >
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              th:value="${facility.id}"
+                              th:checked="${school.facilities.contains(facility)}"
+                              disabled
+                              th:id="${facility.name}"
+                            />
+                            <label
+                              class="form-check-label"
+                              th:for="${facility.name}"
+                              th:text="${facility.name}"
+                            ></label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <h3 class="mt-4">Utilities</h3>
+                    <div class="col-sm-10">
+                      <div class="row">
+                        <div th:each="u : ${utilities}" class="col-sm-4">
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              th:value="${u.id}"
+                              th:checked="${school.utilities.contains(u)}"
+                              disabled
+                              th:id="${u.name}"
+                            />
+                            <label
+                              class="form-check-label"
+                              th:for="${u.name}"
+                              th:text="${u.name}"
+                            ></label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="tab-pane fade"
+                    id="navs-top-rating"
+                    role="tabpanel"
+                  >
+                    <h3>Average ratings</h3>
+
+                    <div class="container d-flex justify-content-center my-5">
+                      <div class="w-50">
+                        <div class="text-center mb-4">
+                          <h4
+                            th:text="${T(java.lang.Math).ceil(school.rating*2)/2} + ' Stars '+ ${'('+school.totalRatingCount + ' Ratings'+')'}"
+                          ></h4>
+                          <div class="mb-3">
+                            <span
+                              th:each="i : ${#numbers.sequence(1, 5)}"
+                              class="fas fa-star fa-xl"
+                              th:classappend="${i <= T(java.lang.Math).ceil(school.rating*2)/2 ? 'full-star' : i < school.rating+1 ? 'half-star' : 'empty-star'}"
+                            >
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          class="progress-bar-container row my-2"
+                          th:each="i : ${#numbers.sequence(0, 4)}"
+                        >
+                          <span
+                            class="col-xl-4"
+                            th:text="${ratingName[i]}"
+                          ></span>
+                          <div class="col-xl-7">
+                            <div
+                              class="progress-bar"
+                              th:each="j : ${#numbers.sequence(1, 5)}"
+                              th:classappend="${j <= avgRating.rating[i] ? 'filled' : ''}"
+                            ></div>
+                          </div>
+                          <span
+                            class="col-xl-1"
+                            th:text="'('+${avgRating.rating[i]}+'/5)'"
+                            >(4/5)</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <h5 class="mt-5">Details</h5>
+                    <ul
+                      class="nav nav-tabs mb-4"
+                      id="ratingTabs"
+                      role="tablist"
+                    >
+                      <li class="btn-stars">
+                        <button
+                          type="button"
+                          class="btn btn-outline-warning active"
+                        >
+                          All
+                        </button>
+                        <!-- Star buttons -->
+                        <button
+                          th:each="i : ${#numbers.sequence(0, 4)}"
+                          type="button"
+                          class="btn btn-outline-warning me-1"
+                          th:data-star="${5-i}"
+                        >
+                          <span th:text="${5-i}"></span>
+                          <i class="fas fa-star full-star"></i>
+                        </button>
+                      </li>
+                    </ul>
+                    <div id="rating-container" style="min-height: 20vh;"></div>
+                    <div class="divider divider-primary">
+                      <button id="see-more" class="btn divider-text">
+                        See More
+                      </button>
+                    </div>
+
+                    <!-- Template for a rating item -->
+                    <template id="rating-template">
+                      <div class="rating-item row border rounded p-3 my-2">
+                        <div class="col-xl-8">
+                          <div class="d-flex">
+                            <img
+                              src="https://via.placeholder.com/50"
+                              alt="User Avatar"
+                              class="user-avatar rounded-circle me-3"
+                            />
+                            <div>
+                              <h6 class="parent-name"></h6>
+                              <small class="created-date"></small>
+                            </div>
+                          </div>
+                          <p class="feedback mt-3"></p>
+                        </div>
+                        <div
+                          class="col-xl-4"
+                          style="border-left: 1px solid blue"
+                        >
+                          <div
+                            class="d-flex justify-content-between align-items-center pb-2 mb-2"
+                          >
+                            <strong>Overall Rating:</strong>
+                            <div>
+                              <span class="overall-rating text-warning"></span>
+                              <span class="avg-rating ms-2"></span>
+                            </div>
+                          </div>
+                          <div class="individual-ratings"></div>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <!-- /tab-->
+              <input type="hidden" id="schoolId" th:value="${school.id}" />
+              <script src="/assets/js/school-detail-view-rating.js"></script>
+              <!--/ Layout Demo -->
+            </div>
+            <div th:replace="~{pop-up/request-popup::request}"></div>
+            <!-- / Content -->
+            <!-- Include Rating Modal -->
+            <div th:replace="~{pop-up/rating-popup:: rating-modal}"></div>
+            <!-- Include View Rating Modal -->
+            <div th:replace="~{pop-up/rating-popup:: view-rating-modal}"></div>
+
+            <div th:replace="~{pop-up/parent-handle-popup::handle-enroll}"></div>
+            <!-- Footer -->
+            <div th:replace="~{components/footer::footer}"></div>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+    </div>
+    <!-- / Layout wrapper -->
+    <script defer th:src="@{/assets/js/request-popup.js}"></script>
+    <script src="/assets/js/my-school-list.js"></script>
+    <script src="/assets/js/school-detail-active-tab.js"></script>
+    <script src="/assets/js/replace-oembed.js"></script>
+    <script defer th:src="@{/assets/js/parent-handle-popup.js}"></script>
+  </body>
+
+  
+</html>

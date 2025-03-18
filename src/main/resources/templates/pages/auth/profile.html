@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+xmlns:th="https://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+
+<head th:replace="~{layouts/base::head}">
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="">
+        <div class="">
+            <!-- Menu -->
+            <!-- <aside th:replace="~{components/sidebar::sidebar}"></aside> -->
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="">
+                <!-- Navbar -->
+                <div th:replace="~{components/header-parent::header}"></div>
+                <!-- / Navbar -->
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <h5 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"><a class="text-muted fw-light"
+                                    href="/">Home</a> > </span> My
+                            Profile
+                        </h5>
+
+                        <h1 class="fw-bold py-1 mb-4">My Profile</h1>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="javascript:void(0);"><i
+                                                class="bx bx-user me-1"></i>My Information</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/auth/profile/change-password"><i
+                                                class="bx bx-key me-1"></i> Change Password</a>
+                                    </li>
+                                </ul>
+                                <div class="card mb-4">
+                                    <h5 class="card-header">Account Info</h5>
+                                    <!-- Account -->
+                                    <div class="alert alert-success" th:if="${message}" th:text="${message}">Hello</div>
+                                    <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}">Hello</div>
+                                    <hr class="my-0" />
+                                    <div class="card-body">
+                                        <form th:action="@{/auth/profile}" th:method="post" th:object="${user}">
+                                            <div class="row">
+                                                <div class="mb-3 col-md-6">
+                                                    <label for="fullName1" class="form-label">Full Name:</label>
+                                                    <input type="text" class="form-control" id="fullName1"
+                                                        placeholder="Enter your full name." th:field="*{fullName}"
+                                                        required />
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('fullName')}"
+                                                        th:errors="*{fullName}"></span>
+
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <label for="userName1" class="form-label">Username:</label>
+                                                    <input type="text" class="form-control" id="userName1"
+                                                        placeholder="Enter your Username." th:field="*{username}"
+                                                        required readonly />
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('username')}"
+                                                        th:errors="*{username}"></span>
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <label for="exampleInputEmail1" class="form-label">Email
+                                                        address:</label>
+                                                    <input type="email" class="form-control" id="exampleInputEmail1"
+                                                        aria-describedby="emailHelp" placeholder="info@xyz.com"
+                                                        th:field="*{email}" required readonly />
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('email')}"
+                                                        th:errors="*{email}"></span>
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <label for="dob" class="form-label">D.O.B</label>
+                                                    <input class="form-control" type="date" name="dob" id="dob"
+                                                        th:field="*{birthDate}"/>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('birthDate')}"
+                                                        th:errors="*{birthDate}"></span>
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <label for="address" class="form-label">Address</label>
+                                                    <select class="form-select select2-form" aria-label="Default select example"
+                                                        id="address" name="provinceId">
+                                                        <option selected hidden disabled value="">City/Province</option>
+                                                        <option th:each="province : ${provinces}"
+                                                            th:value="${province.id}" th:text="${province.name}"
+                                                            th:selected="${user.address != null and user.address.province != null and user.address.province.id == province.id}">
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <label for="mobileNo1" class="form-label">Mobile No. :</label>
+                                                    <input type="text" class="form-control" id="mobileNo1"
+                                                        placeholder="+91-98596 58000" th:field="*{phone}" required />
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('phone')}"
+                                                        th:errors="*{phone}"></span>
+                                                </div>
+
+                                                <div class="mb-3 col-md-6">
+                                                    <select name="districtId" class="form-select select2-form"
+                                                        aria-label="Default select example" id="district">
+                                                        <option selected hidden disabled value="">District</option>
+                                                        <option th:each="district : ${districts}"
+                                                            th:value="${district.id}" th:text="${district.name}"
+                                                            th:selected="${user.address != null and user.address.district != null and user.address.district.id == district.id}">
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <select name="wardId" class="form-select select2-form"
+                                                        aria-label="Default select example" id="ward">
+                                                        <option selected hidden disabled value="">Ward</option>
+                                                        <option th:each="ward : ${wards}" th:value="${ward.id}"
+                                                            th:text="${ward.name}"
+                                                            th:selected="${user.address != null and user.address.wards != null and user.address.wards.id == ward.id}">
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <input type="text" class="form-control" id="street"
+                                                        placeholder="House Number, Street" th:field="*{address.detail}"
+                                                        th:value="${user.address != null ? user.address.detail : ''}" />
+                                                </div>
+                                            </div>
+                                            <div class="mt-5 text-center">
+                                                <a href="/" class="btn btn-outline-primary mx-5">Cancel</a>
+                                                <button type="submit" class="btn btn-primary mx-5">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- /Account -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Content -->
+                </div>
+                <!-- Content wrapper -->
+
+
+                <!-- Footer -->
+                <footer th:replace="~{components/footer::footer}"></footer>
+                <!-- / Footer -->
+
+                <div class="content-backdrop fade"></div>
+            </div>
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    <script src="/assets/js/select2.min.js"></script>
+    <script src="/assets/js/select2-custom.js"></script>
+    <script src="/assets/js/select-address.js"></script>
+
+
+</body>
+
+</html>

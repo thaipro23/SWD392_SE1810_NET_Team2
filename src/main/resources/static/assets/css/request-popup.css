@@ -1,0 +1,14 @@
+.btn-close {
+    position: absolute;
+    top: 50px;
+    right: 40px;
+}
+
+.popup {
+    margin: 0 15%;
+}
+
+.custom-bg {
+    background-color: #f1f1f1;
+    /* Light gray color similar to your image */
+}

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+        xmlns:th="https://www.thymeleaf.org"
+        lang="en"
+        class="light-style layout-menu-fixed"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="/assets/"
+        data-template="vertical-menu-template-free"
+>
+<head th:replace="~{layouts/base::head}"></head>
+<link rel="stylesheet" href="/assets/css/feedback.css" />
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav th:replace="~{components/sidebar::sidebar}"></nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div th:replace="~{components/header::header}"></div>
+
+            <!-- Breadcrumb -->
+            <h4 class="fw-bold py-3 mb-4" style="color: #696cff !important">
+                <a style="color: #696cff !important"
+                   class="text-muted fw-light"
+                   href="#"
+                >School Management ></a>
+                <a style="color: #696cff !important"
+                   class="text-muted fw-light"
+                   th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools'}"
+                >School List ></a>
+                <a style="color: #696cff !important"
+                   class="text-muted fw-light"
+                   th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/detail/' + ${schoolId}}"                >School detail
+                    ></a>
+                Rating & Feedbacks
+            </h4>
+
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Rating & Feedbacks
+                    </h3>
+                </div>
+                <main class="col-md-11 ms-sm-auto col-lg-11 px-md-6">
+
+                <!-- Date Range Selection -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <h4 class="card-title mb-0">From
+                                </h4>
+                            </div>
+                            <div class="col-auto">
+                                <input type="date" class="form-control" id="fromDate" th:value="${fromDate}" onchange="checkDates()">
+                            </div>
+                            <div class="col-auto">
+                                <h4 class="card-title mb-0">To
+                                </h4>
+                            </div>
+                            <div class="col-auto">
+                                <input type="date" class="form-control" id="toDate" th:value="${toDate}" onchange="checkDates()">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+                            </div>
+                        </div>
+                        <div class="text-danger mt-2" id="dateError" style="display: none;">
+                            To date must be greater than From date, cannot select date in the future.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ratings and Summary -->
+                <div class="row mb-4">
+                    <div class="card-header">
+                        <h3 class="section-title">Ratings</h3>
+                    </div>
+
+
+                    <!-- Ratings -->
+                    <div class="col-md-5">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <!-- Learning Program -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Learning Program</span>
+                                    <span class="star-rating">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                              class="fa fa-star"
+                              th:classappend="${i <= T(java.lang.Math).ceil(learningProgramRating*2)/2 ? 'full-star' : i < learningProgramRating + 1 ? 'half-star' : 'empty-star'}">
+                        </span>
+                    </span>
+                                </div>
+
+                                <!-- Facilities & Utilities -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Facilities & Utilities</span>
+                                    <span class="star-rating">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                              class="fa fa-star"
+                              th:classappend="${i <= T(java.lang.Math).ceil(facilitiesRating*2)/2 ? 'full-star' : i < facilitiesRating + 1 ? 'half-star' : 'empty-star'}">
+                        </span>
+                    </span>
+                                </div>
+
+                                <!-- Extracurricular Activities -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Extracurricular Activities</span>
+                                    <span class="star-rating">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                              class="fa fa-star"
+                              th:classappend="${i <= T(java.lang.Math).ceil(extracurricularRating*2)/2 ? 'full-star' : i < extracurricularRating + 1 ? 'half-star' : 'empty-star'}">
+                        </span>
+                    </span>
+                                </div>
+
+                                <!-- Teachers & Staff -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>Teachers & Staff</span>
+                                    <span class="star-rating">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                              class="fa fa-star"
+                              th:classappend="${i <= T(java.lang.Math).ceil(teachersRating*2)/2 ? 'full-star' : i < teachersRating + 1 ? 'half-star' : 'empty-star'}">
+                        </span>
+                    </span>
+                                </div>
+
+                                <!-- Hygiene and Nutrition -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Hygiene and Nutrition</span>
+                                    <span class="star-rating">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}"
+                              class="fa fa-star"
+                              th:classappend="${i <= T(java.lang.Math).ceil(hygieneRating*2)/2 ? 'full-star' : i < hygieneRating + 1 ? 'half-star' : 'empty-star'}">
+                        </span>
+                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Average Rating -->
+                    <!-- Average Rating Card -->
+                    <div class="col-md-4">
+                        <div class="card h-60">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Average Rating</h5>
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <span class="star-rating mb-3">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                          class="fa fa-star"
+                          th:classappend="${i <= T(java.lang.Math).ceil(averageRating*2)/2 ? 'full-star' : i < averageRating+1 ? 'half-star' : 'empty-star'}">
+                    </span>
+                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Feedbacks Card -->
+                    <div class="col-md-3">
+                        <div class="card h-60">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Total Feedbacks</h5>
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                <h2 th:text="${totalFeedbacks}" class="mb-0"></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedbacks and Filters -->
+                <div class="row">
+                    <!-- Feedbacks -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="section-title">All Feedbacks</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="feedbackContainer">
+                                    <div th:each="feedback, iterStat : ${feedbacks}"
+                                         class="feedback-item"
+                                         th:style="${iterStat.index >= 3 ? 'display: none;' : ''}"
+                                         th:data-index="${iterStat.index}">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <strong th:text="${feedback.parent.fullname}"></strong>
+                                            <small class="text-muted" th:text="${#temporals.format(feedback.createdAt, 'dd MMM yyyy, HH:mm')}"></small>
+                                        </div>
+                                        <div class="star-rating mb-2">
+                                            <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                                  class="fa fa-star"
+                                                  th:classappend="${i <= T(java.lang.Math).ceil(feedback.getAvgRating()*2)/2 ? 'full-star' : i < feedback.getAvgRating()+1 ? 'half-star' : 'empty-star'}">
+                                            </span>
+                                        </div>
+                                        <p class="mb-0" th:text="${feedback.feedback}"></p>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button id="loadMoreBtn" class="btn btn-link" th:if="${feedbacks.size() > 3}" onclick="loadMore()">
+                                        View more feedbacks...
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0"><i class="fas fa-filter"></i> Filters</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- 1 star -->
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="filter1" onclick="filterFeedbacks(1)">
+                                    <label class="form-check-label" for="filter1">
+                                        <i class="fas fa-star text-warning"></i>
+                                    </label>
+                                </div>
+
+                                <!-- 2 stars -->
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="filter2" onclick="filterFeedbacks(2)">
+                                    <label class="form-check-label" for="filter2">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                    </label>
+                                </div>
+
+                                <!-- 3 stars -->
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="filter3" onclick="filterFeedbacks(3)">
+                                    <label class="form-check-label" for="filter3">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                    </label>
+                                </div>
+
+                                <!-- 4 stars -->
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="filter4" onclick="filterFeedbacks(4)">
+                                    <label class="form-check-label" for="filter4">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                    </label>
+                                </div>
+
+                                <!-- 5 stars -->
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="filter5" onclick="filterFeedbacks(5)">
+                                    <label class="form-check-label" for="filter5">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                    </label>
+                                </div>
+
+                                <button class="btn btn-secondary w-100 mt-3" onclick="resetFilters()">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div></main>
+                <footer th:replace="~{components/footer::footer}"></footer>
+
+            </main>
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function checkDates() {
+            const fromDate = new Date(document.getElementById("fromDate").value);
+            const toDate = new Date(document.getElementById("toDate").value);
+            const errorElement = document.getElementById("dateError");
+
+            if (fromDate > toDate) {
+                errorElement.style.display = "block";
+                return false;
+            } else {
+                errorElement.style.display = "none";
+                refreshData2();
+                return true;
+            }
+        }
+        function refreshData() {
+            const currentPath = window.location.pathname;
+            const pathParts = currentPath.split('/');
+            if (pathParts.length < 3) {
+                console.error("Invalid path format. Expected /school/{schoolId}/...");
+                return;
+            }
+
+            const schoolId = pathParts[4];
+            const basePath = currentPath.substring(0, currentPath.indexOf('/detail'));
+            const newUrl = `${basePath}/detail/${schoolId}/rating`;
+
+            window.location.href = newUrl;
+
+        }
+        function refreshData2() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            if (!fromDate || !toDate) {
+                alert("Please select both from and to dates.");
+                return;
+            }
+
+            const currentPath = window.location.pathname;
+            const pathParts = currentPath.split('/');
+            if (pathParts.length < 3) {
+                console.error("Invalid path format. Expected /school/{schoolId}/...");
+                return;
+            }
+
+            const schoolId = pathParts[4];
+            const basePath = currentPath.substring(0, currentPath.indexOf('/detail'));
+            const newUrl = `${basePath}/detail/${schoolId}/rating?from=${fromDate}&to=${toDate}`;
+
+            window.location.href = newUrl;
+        }
+
+
+    </script>
+    <script th:inline="javascript">
+        const ITEMS_PER_LOAD = 3;
+        let currentlyShown = ITEMS_PER_LOAD;
+        const totalItems = /*[[${feedbacks.size()}]]*/ 0;
+
+        function loadMore() {
+            const checkboxes = document.querySelectorAll('.form-check-input');
+            const selectedFilters = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => parseInt(checkbox.id.slice(-1)));
+
+            const feedbackItems = selectedFilters.length === 0
+                ? document.querySelectorAll('.feedback-item[style*="display: none"]')
+                : Array.from(document.querySelectorAll('.feedback-item[style*="display: none"]')).filter(item => {
+                    const starRating = item.querySelectorAll('.star-rating .full-star').length;
+                    return selectedFilters.includes(starRating);
+                });
+
+            const itemsToShow = Math.min(ITEMS_PER_LOAD, feedbackItems.length);
+
+            for (let i = 0; i < itemsToShow; i++) {
+                const item = feedbackItems[i];
+                item.style.display = '';
+                item.classList.add('new');
+
+                setTimeout(() => {
+                    item.classList.remove('new');
+                }, 500);
+            }
+
+            currentlyShown += itemsToShow;
+
+            if (currentlyShown >= totalItems || itemsToShow < ITEMS_PER_LOAD) {
+                document.getElementById('loadMoreBtn').style.display = 'none';
+            }
+        }
+
+        function filterFeedbacks() {
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+            const checkboxes = document.querySelectorAll('.form-check-input');
+
+            const selectedFilters = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => parseInt(checkbox.id.slice(-1)));
+
+            let visibleCount = 0;
+
+            feedbackItems.forEach(item => {
+                const starRating = item.querySelectorAll('.star-rating .full-star').length;
+
+                if (selectedFilters.length === 0 || selectedFilters.includes(starRating)) {
+                    item.style.display = visibleCount < ITEMS_PER_LOAD ? '' : 'none';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            currentlyShown = Math.min(visibleCount, ITEMS_PER_LOAD);
+
+            document.getElementById('loadMoreBtn').style.display = (visibleCount > ITEMS_PER_LOAD) ? 'block' : 'none';
+        }
+
+        function resetFilters() {
+            document.querySelectorAll('.form-check-input').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            const feedbackItems = document.querySelectorAll('.feedback-item');
+
+            feedbackItems.forEach((item, index) => {
+                item.style.display = index < ITEMS_PER_LOAD ? '' : 'none';
+            });
+
+            currentlyShown = Math.min(ITEMS_PER_LOAD, feedbackItems.length);
+
+            document.getElementById('loadMoreBtn').style.display = (currentlyShown < totalItems) ? 'block' : 'none';
+        }
+
+    </script>
+
+
+    </body>
+    </html>

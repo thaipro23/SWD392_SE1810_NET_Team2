@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+xmlns:th="https://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+
+<head th:replace="~{layouts/base::head}">
+
+</head>
+<style>
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: ">";
+    }
+</style>
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside th:replace="~{components/sidebar::sidebar}"></aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          <div th:replace="~{components/header::header}"></div>
+
+          <!-- / Navbar -->
+          <div class="card-header">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/admin/users" class="breadcrumb-item active text-primary">User Management</a>
+                    </li>
+                    <li class="breadcrumb-item active text-primary" aria-current="page">User Details</li>
+                </ol>
+            </nav>
+            </div>
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+                    <div class="col-xl-8 mx-auto m-5"> <!-- Center the content horizontally -->
+                        <!-- HTML5 Inputs -->
+                        <div class="mb-3 row">
+                            <div class="card mb-4">
+                                <h3 class="card-header">User Detail</h3>
+                                <div class="card-body">
+                                    <!-- Input fields -->
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-2 col-form-label">UserName*</label>
+                                        <div class="col-md-10">
+                                            <input th:value="${user.username}" class="form-control" type="text"
+                                                id="html5-text-input" readonly></span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-2 col-form-label">Full Name*</label>
+                                        <div class="col-md-10">
+                                            <input th:value="${user.fullname}" class="form-control" type="text"
+                                                id="html5-text-input" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-2 col-form-label">Email*</label>
+                                        <div class="col-md-10">
+                                            <input th:value="${user.email}" class="form-control" type="text"
+                                                id="html5-text-input" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-2 col-form-label">DOB*</label>
+                                        <div class="col-md-10">
+                                            <input th:value="${user.birthDate}" class="form-control" type="text"
+                                                id="html5-text-input" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-2 col-form-label">Phone*</label>
+                                        <div class="col-md-10">
+                                            <input th:value="${user.phone}" class="form-control" type="text"
+                                                id="html5-text-input" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-2 col-form-label">Role*</label>
+                                        <div class="col-md-10">
+                                            <input th:value="${user.role.name}" class="form-control" type="text"
+                                                id="html5-text-input" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="html5-text-input" class="col-md-2 col-form-label">Status</label>
+                                        <div class="col-md-10">
+                                            <input class="form-control" type="text" id="html5-text-input" readonly
+                                                th:value="${user.isActive} ? 'Active' : 'Inactive'" />
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 d-flex justify-content-end">
+                                        <a th:if="${!user.isActive}" style="width: 120px;"
+                                            class="btn btn-outline-primary me-2" 
+                                            th:onclick="'activateUser(' + ${user.id} + ');'">Activate</a>
+
+                                        <a th:if="${user.isActive}" style="width: 120px;"
+                                            class="btn btn-outline-primary me-2" 
+                                            th:onclick="'deactivateUser(' + ${user.id} + ');'">Deactivate</a>
+                                        <a href="javascript:history.back()" style="width: 120px; " class="btn btn-outline-primary me-2">Cancel</a>
+                                        <a th:href="@{/admin/users/detail/{id}/edit(id=${user.id})}" style="width: 120px;"
+                                            class="btn btn-primary">Edit</a>
+                                    </div>
+                                    <!-- Add the rest of your input fields here -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / Content -->
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer th:replace="~{components/footer::footer}"></footer>
+                <!-- / Footer -->
+            </div>
+        </div>
+    </div>
+    <!-- / Layout wrapper -->
+</body>
+<script>
+    function activateUser(userId) {
+        $.ajax({
+            url: '/admin/users/activate/' + userId,
+            type: 'POST',
+            success: function (response) {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('Error activating user: ' + error);
+            }
+        });
+    }
+
+    function deactivateUser(userId) {
+        $.ajax({
+            url: '/admin/users/deactivate/' + userId,
+            type: 'POST',
+            success: function (response) {
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('Error deactivating user: ' + error);
+            }
+        });
+    }
+</script>
+
+
+</html>

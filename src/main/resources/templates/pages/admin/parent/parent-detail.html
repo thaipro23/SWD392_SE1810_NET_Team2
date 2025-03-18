@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed" dir="ltr"
+    data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
+
+<head th:replace="~{layouts/base::head}"></head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+
+            <aside th:replace="~{components/sidebar::sidebar}"></aside>
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+
+                <div th:replace="~{components/header::header}"></div>
+
+                <!-- / Navbar -->
+                <div class="card-header">
+                    <h6 class="fw-bold mb-4 text-primary">
+                        <span class="">Parent Management
+                        </span>
+                        <span class="text-muted fw-light"> <i class="fas fa-chevron-right"></i> </span>
+                        <a class=""
+                            th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/parents'}">Parent
+                            List</a>
+                        <span class="text-muted fw-light me-2"> <i class="fas fa-chevron-right"></i> </span>
+                        <span class="me-2">View parent's details</span>
+                    </h6>
+                </div>
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+
+                    <div class="container-xxl flex-grow-1 ">
+                        <!-- Layout Demo -->
+                        <div class="layout-demo-wrapper">
+                            <div class="container-xxl flex-grow-1 ">
+                                <div class="mx-5">
+                                    <div class="mb-3 row mx-5">
+                                        <div class="card mb-4">
+                                            <h3 class="card-header">Parent Detail</h3>
+                                            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                                                <p th:text="${successMessage}"></p>
+                                            </div>
+                                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                                                <p th:text="${errorMessage}"></p>
+                                            </div>
+                                            <div class="card-body">
+                                                <form action="#"
+                                                    th:action="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/parents/unenroll/' + ${user.id}}"
+                                                    method="post">
+                                                    <!-- Input fields -->
+                                                    <div class="mb-3 row">
+                                                        <label for="html5-text-input"
+                                                            class="col-md-2 col-form-label">Full
+                                                            Name</label>
+                                                        <div class="col-md-10">
+                                                            <input th:value="${user.fullname}" class="form-control"
+                                                                type="text" id="html5-text-input" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <label for="html5-text-input"
+                                                            class="col-md-2 col-form-label">Email</label>
+                                                        <div class="col-md-10">
+                                                            <input th:value="${user.email}" class="form-control"
+                                                                type="text" id="html5-text-input" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <label for="html5-text-input"
+                                                            class="col-md-2 col-form-label">DOB</label>
+                                                        <div class="col-md-10">
+                                                            <input th:value="${user.birthDate}" class="form-control"
+                                                                type="text" id="html5-text-input" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <label for="html5-text-input"
+                                                            class="col-md-2 col-form-label">Phone</label>
+                                                        <div class="col-md-10">
+                                                            <input th:value="${user.phone}" class="form-control"
+                                                                type="text" id="html5-text-input" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <label for="html5-text-input"
+                                                            class="col-md-2 col-form-label">Address</label>
+                                                        <div class="col-md-10">
+                                                            <input th:value="${user.address}" class="form-control"
+                                                                type="text" id="html5-text-input" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <label for="enrollment-select"
+                                                            class="col-md-2 col-form-label">Enrolled school</label>
+                                                        <div class="col-md-7">
+                                                            <select class="form-select select2-form"
+                                                                id="enrollment-select" th:name="enrollmentId"
+                                                                onchange="updateRatingAndFeedback(this.value)"
+                                                                th:if="${enrollments != null && !enrollments.isEmpty()}">
+                                                                <option th:each="enrollment : ${enrollments}"
+                                                                    th:value="${enrollment.id}"
+                                                                    th:text="${enrollment.school.name}"></option>
+                                                            </select>
+                                                            <input class="form-control" type="text"
+                                                                value="Not enrolled yet"
+                                                                th:if="${enrollments == null || enrollments.isEmpty()}"
+                                                                readonly />
+                                                        </div>
+                                                        <button type="button" class="btn btn-outline-primary col-md-3"
+                                                            data-bs-toggle="modal" data-bs-target="#unenrollModal"
+                                                            th:if="${enrollments != null && !enrollments.isEmpty()}">
+                                                            <span class="align-middle">Unenroll this school</span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-primary col-md-3"
+                                                            data-bs-toggle="modal" data-bs-target="#unenrollModal"
+                                                            disabled
+                                                            th:if="${enrollments == null || enrollments.isEmpty()}">
+                                                            <span class="align-middle">Unenroll this school</span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="mb-3 row">
+                                                        <label for="html5-text-input"
+                                                            class="col-md-2 col-form-label">Provided rating</label>
+                                                        <div class="col-md-10" id="rating-container">
+                                                            <div id="star-rating">
+                                                                <span
+                                                                    th:if="${enrollments == null || enrollments.isEmpty()}">No
+                                                                    rating</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3 row">
+                                                        <label for="html5-text-input"
+                                                            class="col-md-2 col-form-label">Feedback</label>
+                                                        <div class="col-md-10">
+                                                            <textarea class="form-control" id="feedback-text" readonly
+                                                                rows="4"
+                                                                th:if="${enrollments != null && !enrollments.isEmpty()}"></textarea>
+                                                            <textarea class="form-control" id="feedback-text" readonly
+                                                                rows="4"
+                                                                th:if="${enrollments == null || enrollments.isEmpty()}">No feedback</textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal fade" id="unenrollModal" tabindex="-1"
+                                                        aria-labelledby="unenrollModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content ">
+                                                                <div class="card-body">
+                                                                    <div class="">
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <h4 class="mb-2">Unenroll parent from school
+                                                                            </h4>
+                                                                            <a href="javascript:void(0);"
+                                                                                data-bs-dismiss="modal"
+                                                                                class="link-secondary"><i
+                                                                                    class="fa-solid fa-xmark"></i></a>
+                                                                        </div>
+                                                                        <p class="mb-4">Are you sure you want to
+                                                                            unenroll
+                                                                            this parent from this school?
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="card-body bg-light-custom py-2 rounded-bottom">
+                                                                    <div class="d-flex justify-content-end">
+                                                                        <a href="javascript:void(0);"
+                                                                            class="d-flex align-items-center ms-1"
+                                                                            data-bs-dismiss="modal">
+                                                                            <span class="ms-1">No. Take me back!</span>
+                                                                        </a>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary mx-3">Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <form action="#"
+                                                    th:action="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/parents/uncancel/' + ${user.id}}"
+                                                    method="post">
+                                                    <div class="mb-3 row">
+                                                        <label for="enrollment-select"
+                                                            class="col-md-2 col-form-label">Cancelled school</label>
+                                                        <div class="col-md-7">
+                                                            <select class="form-select select2-form"
+                                                                id="cancelled-select" th:name="cancelledId"
+                                                                th:if="${cancelledSchools != null && !cancelledSchools.isEmpty()}">
+                                                                <option th:each="cancelledSchool : ${cancelledSchools}"
+                                                                    th:value="${cancelledSchool.id}"
+                                                                    th:text="${cancelledSchool.school.name}"></option>
+                                                            </select>
+                                                            <input class="form-control" type="text"
+                                                                value="Not cancelled yet"
+                                                                th:if="${cancelledSchools == null || cancelledSchools.isEmpty()}"
+                                                                readonly />
+                                                        </div>
+                                                        <button type="button" class="btn btn-outline-primary col-md-3"
+                                                            data-bs-toggle="modal" data-bs-target="#uncancelModal"
+                                                            th:if="${cancelledSchools != null && !cancelledSchools.isEmpty()}">
+                                                            <span class="align-middle">Uncancel this school</span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-primary col-md-3"
+                                                            data-bs-toggle="modal" data-bs-target="#uncancelModal"
+                                                            disabled
+                                                            th:if="${cancelledSchools == null || cancelledSchools.isEmpty()}">
+                                                            <span class="align-middle">Uncancel this school</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal fade" id="uncancelModal" tabindex="-1"
+                                                        aria-labelledby="uncancelModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content ">
+                                                                <div class="card-body">
+                                                                    <div class="">
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <h4 class="mb-2">Uncancel parent from this
+                                                                                school
+                                                                            </h4>
+                                                                            <a href="javascript:void(0);"
+                                                                                data-bs-dismiss="modal"
+                                                                                class="link-secondary"><i
+                                                                                    class="fa-solid fa-xmark"></i></a>
+                                                                        </div>
+                                                                        <p class="mb-4">Are you sure you want to
+                                                                            uncancel
+                                                                            this parent from this school?
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="card-body bg-light-custom py-2 rounded-bottom">
+                                                                    <div class="d-flex justify-content-end">
+                                                                        <a href="javascript:void(0);"
+                                                                            class="d-flex align-items-center ms-1"
+                                                                            data-bs-dismiss="modal">
+                                                                            <span class="ms-1">No. Take me back!</span>
+                                                                        </a>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary mx-3">Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="mt-5 d-flex justify-content-end">
+                                                    <a th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/parents/enroll/' + ${user.id}}"
+                                                        class="btn btn-primary mx-3">Enroll A
+                                                        New
+                                                        School</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Layout Demo -->
+                    </div>
+                    <!-- / Content -->
+                    <!-- / Navbar -->
+
+                    <!-- Footer -->
+                    <footer th:replace="~{components/footer::footer}"></footer>
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    <script src="/assets/js/get-rating-by-enrollment.js"></script>
+</body>
+
+</html>

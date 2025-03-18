@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed" dir="ltr"
+  data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
+
+<head th:replace="~{layouts/base :: head}">
+</head>
+
+<style>
+  .full-star {
+    color: gold;
+  }
+
+  .empty-star {
+    color: #d3d3d3;
+  }
+
+  .invalid-feedback {
+    display: block !important;
+    color: red;
+    /* Màu lỗi để dễ nhận biết */
+  }
+
+  .half-star {
+    background: linear-gradient(90deg, gold 50%, #d3d3d3 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+  }
+</style>
+
+<body>
+  <!-- Layout wrapper -->
+
+  <!-- Navbar -->
+  <div th:replace="~{components/header-parent::header}"></div>
+
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Search Section -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+      <section class="bg-dark text-white py-3">
+        <div class="container">
+          <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+            <!-- Input fields for school name, city/province, district -->
+            <div class="row">
+              <div class="col-md-5 mb-2">
+                <input style="width: 100%" type="text" th:field="*{name}" class="form-control"
+                  placeholder="Enter a school name">
+              </div>
+              <div class="col-md-3 mb-2">
+                <select class="form-select select2-form" id="address" th:field="*{provinceId}">
+                  <option value="">City/Province</option>
+                  <option th:each="province : ${provinces}" th:value="${province.id}" th:text="${province.name}">
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-3 mb-2">
+                <select class="form-select select2-form" id="district" th:field="*{districtId}">
+                  <option value="">District</option>
+                  <option th:each="district : ${districts}" th:value="${district.id}" th:text="${district.name}">
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-1 mb-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+              </div>
+            </div>
+          </form>
+          <div th:if="${errorMessage}" class="alert alert-danger mt-2" th:text="${errorMessage}"></div>
+        </div>
+      </section>
+      <h5 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"><a class="text-muted fw-light" href="/">Home</a> >
+        </span> Search for school
+      </h5>
+      <div class="text-center mb-4">
+        <p th:if="${errorMessage == null or errorMessage.isEmpty()}"
+          th:text="${totalItems == 0 or totalItems == null ? 'No schools match your credentials, please try again.' : 'There are ' + totalItems + ' schools that match your search criteria'}">
+        </p>
+      </div>
+
+
+      <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+        <input type="hidden" name="page" th:value="${pageNum != null ? pageNum : 1}">
+        <input type="hidden" th:field="*{name}">
+        <input type="hidden" th:field="*{provinceId}">
+        <input type="hidden" th:field="*{districtId}">
+        <input type="hidden" th:field="*{schoolTypeId}">
+        <input type="hidden" th:field="*{childAgeId}">
+        <input type="hidden" th:field="*{facilityIds}">
+        <input type="hidden" th:field="*{utilityIds}">
+        <div class="mb-3 d-flex justify-content-end">
+          <select class="form-select" th:field="*{sortBy}" style="width: auto;">
+            <option value="RATING">By Rating</option>
+            <option value="NEWEST">By Time</option>
+            <option value="FEE_HIGH_TO_LOW">By Fee High to Low</option>
+            <option value="FEE_LOW_TO_HIGH">By Fee Low to High</option>
+          </select>
+        </div>
+      </form>
+
+
+      <div class="container my-4">
+
+
+
+
+        <!-- Results Section -->
+        <div class="row">
+          <!-- Filters Sidebar -->
+          <aside class="col-md-3">
+            <div class="bg-white p-3 border rounded mb-4">
+              <h5>Refine your search</h5>
+              <hr>
+              <form th:action="@{/search}" method="post" id="filterForm" th:object="${searchRequest}">
+                <div class="mb-3">
+                  <label class="form-label">Type of school</label>
+                  <select class="form-select" th:field="*{schoolTypeId}">
+                    <option value="">All</option>
+                    <option th:each="type : ${schoolTypes}" th:value="${type.id}" th:text="${type.name}">
+                    </option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Admission age</label>
+                  <select class="form-select" th:field="*{childAgeId}">
+                    <option value="">All</option>
+                    <option th:each="age : ${childAges}" th:value="${age.id}" th:text="${age.name}">
+                    </option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Monthly fee (VND/month)</label>
+                  <div id="slider" class="range-slider"></div>
+                  <div class="d-flex justify-content-between align-items-end">
+                    <div class="col">
+                      <label class="form-label">Min</label>
+                      <input type="number" id="minValue" th:field="*{feeFrom}" class="form-control text-center"
+                        placeholder="Min (Millions)"
+                        th:value="${searchRequest.feeFrom != null ? searchRequest.feeFrom : 1}"
+                        th:classappend="${#fields.hasErrors('feeFrom') || #fields.hasErrors('feeTo')} ? 'is-invalid' : ''">
+                    </div>
+
+                    <div class="col">
+                      <label class="form-label">Max</label>
+                      <input type="number" id="maxValue" th:field="*{feeTo}" class="form-control text-center"
+                        placeholder="Max (Millions)"
+                        th:value="${searchRequest.feeTo != null ? searchRequest.feeTo : 20}"
+                        th:classappend="${#fields.hasErrors('feeFrom') || #fields.hasErrors('feeTo')} ? 'is-invalid' : ''">
+                    </div>
+                  </div>
+
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('feeFrom') || #fields.hasErrors('feeTo')}"
+                    th:errors="*{feeFrom}">
+                  </div>
+                </div>
+
+
+
+                <div class="mb-3">
+                  <label class="form-label">Facilities</label>
+                  <div th:each="facility : ${facilities}" class="form-check">
+                    <input class="form-check-input" type="checkbox" th:field="*{facilityIds}" th:value="${facility.id}"
+                      th:id="${'facility-' + facility.id}">
+                    <label class="form-check-label" th:for="${'facility-' + facility.id}" th:text="${facility.name}">
+                    </label>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Utilities</label>
+                  <div th:each="utility : ${utilities}" class="form-check">
+                    <input class="form-check-input" type="checkbox" th:field="*{utilityIds}" th:value="${utility.id}"
+                      th:id="${'utility-' + utility.id}">
+                    <label class="form-check-label" th:for="${'utility-' + utility.id}" th:text="${utility.name}">
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Hidden fields to maintain state -->
+                <input type="hidden" th:field="*{provinceId}">
+                <input type="hidden" th:field="*{districtId}">
+                <input type="hidden" th:field="*{name}">
+                <input type="hidden" th:field="*{sortBy}">
+                <input type="hidden" name="page" value="0">
+
+                <button type="submit" class="btn btn-primary w-100 mb-2">Apply</button>
+
+
+              </form>
+              <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+                <input type="hidden" th:field="*{name}" value="">
+                <input type="hidden" th:field="*{provinceId}" value="">
+                <input type="hidden" th:field="*{districtId}" value="">
+                <input type="hidden" th:field="*{sortBy}" value="">
+                <button type="submit" class="btn btn-secondary w-100">Clear Filter</button>
+              </form>
+            </div>
+          </aside>
+
+          <!-- School List -->
+          <section class="col-md-9">
+            <!-- Alert for errors if any -->
+
+            <!-- Schools -->
+
+
+            <div th:each="school : ${schools}" class="card rounded-3 shadow-sm border-primary mb-3">
+              <div class="card-body p-4">
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <div>
+                      <a th:href="@{/parent/school-detail/{schoolId}(schoolId=${school.id})}">
+                        <img
+                                th:src="${school.images.size() > 0 ? school.images[0] : '/assets/img/backgrounds/no-image.jpg'}"
+                                alt="School Image"
+                                class="rounded img-fluid mb-2">
+                      </a>
+                    </div>
+
+                    <div>
+                      <div class="text-warning mb-1">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}" class="fa fa-star"
+                          th:classappend="${i <= T(java.lang.Math).ceil(school.rating*2)/2 ? 'full-star' : i < school.rating + 1 ? 'half-star' : 'empty-star'}">
+                        </span>
+                        <span class="text-dark ms-2"
+                          th:text="${school.rating != null ? (school.rating == 0 ? '0' : #numbers.formatDecimal(T(java.lang.Math).ceil(school.rating*2)/2, 0, 'COMMA', 1, 'POINT').replace('.0', '')) : '0'}  + '/5 (' + ${school.totalRatingCount} + ' ratings)'">
+                          5.0/5 (120 ratings)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <a class="h3 fw-bold text-decoration-underline" style="margin: 0;color: #18A0FB;"
+                        th:href="@{/parent/school-detail/{schoolId}(schoolId=${school.id})}" th:text="${school.name}">
+                        Fort Street Public School
+                      </a>
+                      </h3>
+                      </a>
+                      <div class="d-flex justify-content-between p2" th:if="${school.enrollStatus != null}">
+                        <button th:if="${school.enrollStatus.name() == 'UNENROLL'}"
+                          th:id="'requestCounseling' + ${school.id}" class="btn btn-primary request-counseling-btn my-2"
+                          th:data-school-id="${school.id}" onclick="fetchUserInfo()">
+                          Request Counseling
+                        </button>
+                        <button th:if="${school.enrollStatus.name() == 'UNENROLL'}"
+                          class="btn btn-primary enroll-btn my-2 mx-1" th:data-school-id="${school.id}"
+                          onclick="openEnrollModal(this)">
+                          Enroll Now
+                        </button>
+                        <button disabled th:if="${school.enrollStatus.name() == 'ENROLL'}"
+                          class="btn btn-primary enroll-btn my-2 mx-1" th:data-school-id="${school.id}">
+                          Enrolled
+                        </button>
+                        <button th:if="${school.enrollStatus.name() == 'PENDING'}"
+                          class="btn btn-danger enroll-btn my-2 mx-1" th:data-school-id="${school.id}"
+                          onclick="cancelEnrollModal(this)">
+                          Cancel request
+                        </button>
+                        <button disabled th:if="${school.enrollStatus.name() == 'CANCELLED'}"
+                          class="btn btn-primary enroll-btn my-2 mx-1" th:data-school-id="${school.id}">
+                          You can not enroll to this school!
+                        </button>
+                      </div>
+                      <div class="d-flex justify-content-between p2" th:if="${school.enrollStatus == null}">
+                        <button th:id="'requestCounseling' + ${school.id}"
+                          class="btn btn-primary request-counseling-btn my-2 mx-1" th:data-school-id="${school.id}"
+                          onclick="fetchUserInfo()">
+                          Request Counseling
+                        </button>
+                      </div>
+
+                    </div>
+
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <i class="menu-icon fa-light fa-location-dot"></i>Address:
+                      </div>
+                      <div class="col-md-9" th:text="${school.address.detail}">
+                        24 Fordham Avenue CAMBERWELL VIC 3124
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <i class="menu-icon fa-light fa-envelope"></i>Email:
+                      </div>
+                      <div class="col-md-9">
+                        <a href="#" class="text-decoration-underline" th:text="${school.email}" style="color: #18A0FB;">
+                          FortStreet.school.edu
+                        </a>
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <i class="menu-icon fa-light fa-circle-dollar"></i>Tuition fee:
+                      </div>
+                      <div class="col-md-9"
+                        th:text="'From ' + ${#numbers.formatDecimal(school.feeFrom, 0, 'COMMA', 0, 'POINT')} + 'VND/month ' + 'To ' + ${#numbers.formatDecimal(school.feeTo, 0, 'COMMA', 0, 'POINT')} + 'VND/month'">
+                        From 4,000,000 VND/month
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <i class="menu-icon fa-light fa-circle-bookmark"></i>Admission age:
+                      </div>
+                      <div class="col-md-9" th:with="range=${school.childAge}">
+                        <div th:if="${range == '6m - 1y'}">
+                          From 6 months to 1 year
+                        </div>
+                        <div th:if="${range == '1-3y'}">
+                          From 1 year to 3 years
+                        </div>
+                        <div th:if="${range == '3-6y'}">
+                          From 3 years to 6 years
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <i class="menu-icon fal fa-light fa-landmark"></i>School type:
+                      </div>
+                      <div class="col-md-9" th:text="${school.schoolType}">
+                        Public
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <i class="menu-icon fal fa-light fa-list-check"></i>Facilities and Utilities:
+                      </div>
+                      <div class="col-md-9">
+                        <th:block th:each="facility : ${school.facilities}">
+                          <span class="badge bg-label-info border me-2 mb-2" th:text="${facility}"
+                            style="color: #18A0FB;"></span>
+                        </th:block>
+                        <th:block th:each="utility : ${school.utilities}">
+                          <span class="badge bg-label-info border me-2 mb-2" th:text="${utility}"
+                            style="color: #18A0FB;"></span>
+                        </th:block>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div th:replace="~{pop-up/request-popup::request}"></div>
+
+            <div th:replace="~{pop-up/parent-handle-popup::handle-enroll}"></div>
+
+            <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+              <ul class="pagination justify-content-center">
+                <!-- Previous -->
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                  <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+                    <input type="hidden" name="page" th:value="${currentPage - 1}">
+                    <input type="hidden" th:field="*{name}">
+                    <input type="hidden" th:field="*{provinceId}">
+                    <input type="hidden" th:field="*{districtId}">
+                    <input type="hidden" th:field="*{sortBy}">
+                    <input type="hidden" th:field="*{schoolTypeId}">
+                    <input type="hidden" th:field="*{childAgeId}">
+                    <input type="hidden" th:field="*{facilityIds}">
+                    <input type="hidden" th:field="*{utilityIds}">
+                    <button type="submit" class="page-link" th:disabled="${currentPage == 1}">
+                      <span aria-hidden="true">&laquo;</span>
+                    </button>
+                  </form>
+                </li>
+
+                <!-- First page -->
+                <li class="page-item" th:if="${currentPage > 3}">
+                  <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+                    <input type="hidden" name="page" th:value="1">
+                    <input type="hidden" th:field="*{name}">
+                    <input type="hidden" th:field="*{provinceId}">
+                    <input type="hidden" th:field="*{districtId}">
+                    <input type="hidden" th:field="*{sortBy}">
+                    <input type="hidden" th:field="*{schoolTypeId}">
+                    <input type="hidden" th:field="*{childAgeId}">
+                    <input type="hidden" th:field="*{facilityIds}">
+                    <input type="hidden" th:field="*{utilityIds}">
+                    <button type="submit" class="page-link">1</button>
+                  </form>
+                </li>
+
+                <!-- Ellipsis if current page is far from the beginning -->
+                <li class="page-item disabled" th:if="${currentPage > 4}">
+                  <span class="page-link">...</span>
+                </li>
+
+                <!-- Pages around current page -->
+                <li class="page-item" th:each="pageNum : ${#numbers.sequence(currentPage - 2, currentPage + 2)}"
+                  th:if="${pageNum > 0 and pageNum <= totalPages}"
+                  th:classappend="${pageNum == currentPage} ? 'active'">
+                  <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+                    <input type="hidden" name="page" th:value="${pageNum}">
+                    <input type="hidden" th:field="*{name}">
+                    <input type="hidden" th:field="*{provinceId}">
+                    <input type="hidden" th:field="*{districtId}">
+                    <input type="hidden" th:field="*{sortBy}">
+                    <input type="hidden" th:field="*{schoolTypeId}">
+                    <input type="hidden" th:field="*{childAgeId}">
+                    <input type="hidden" th:field="*{facilityIds}">
+                    <input type="hidden" th:field="*{utilityIds}">
+                    <button type="submit" class="page-link" th:text="${pageNum}">1</button>
+                  </form>
+                </li>
+
+                <!-- Ellipsis if current page is far from the end -->
+                <li class="page-item disabled" th:if="${currentPage < totalPages - 3}">
+                  <span class="page-link">...</span>
+                </li>
+
+                <!-- Last page -->
+                <li class="page-item" th:if="${currentPage < totalPages - 2}">
+                  <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+                    <input type="hidden" name="page" th:value="${totalPages}">
+                    <input type="hidden" th:field="*{name}">
+                    <input type="hidden" th:field="*{provinceId}">
+                    <input type="hidden" th:field="*{districtId}">
+                    <input type="hidden" th:field="*{sortBy}">
+                    <input type="hidden" th:field="*{schoolTypeId}">
+                    <input type="hidden" th:field="*{childAgeId}">
+                    <input type="hidden" th:field="*{facilityIds}">
+                    <input type="hidden" th:field="*{utilityIds}">
+                    <button type="submit" class="page-link" th:text="${totalPages}"></button>
+                  </form>
+                </li>
+
+                <!-- Next -->
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                  <form th:action="@{/search}" method="post" th:object="${searchRequest}">
+                    <input type="hidden" name="page" th:value="${currentPage + 1}">
+                    <input type="hidden" th:field="*{name}">
+                    <input type="hidden" th:field="*{provinceId}">
+                    <input type="hidden" th:field="*{districtId}">
+                    <input type="hidden" th:field="*{sortBy}">
+                    <input type="hidden" th:field="*{schoolTypeId}">
+                    <input type="hidden" th:field="*{childAgeId}">
+                    <input type="hidden" th:field="*{facilityIds}">
+                    <input type="hidden" th:field="*{utilityIds}">
+                    <button type="submit" class="page-link" th:disabled="${currentPage == totalPages}">
+                      <span aria-hidden="true">&raquo;</span>
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </nav>
+
+
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer th:replace="~{components/footer :: footer}"></footer>
+
+  <!-- Core scripts -->
+
+  <script defer th:src="@{/assets/js/select-address.js}"></script>
+  <script defer th:src="@{/assets/js/request-popup.js}"></script>
+  <script defer th:src="@{/assets/js/parent-handle-popup.js}"></script>
+  <link rel="stylesheet" href="/assets/css/http_cdn.jsdelivr.net_npm_range-slider-input@2.4_dist_style.css">
+  <script src="/assets/js/http_cdn.jsdelivr.net_npm_range-slider-input@2.4_dist_rangeslider.umd.min.js"></script>
+  <!-- Footer and Scripts -->
+
+
+  <script>
+    const minValueInput = document.getElementById('minValue');
+    const maxValueInput = document.getElementById('maxValue');
+    const sliderElement = document.getElementById('slider');
+
+    const slider = rangeSlider(sliderElement, {
+      min: 1,
+      max: 20,
+      step: 1,
+      value: [minValueInput.value || 1, maxValueInput.value || 20],
+      onInput: (value) => {
+        minValueInput.value = value[0];
+        maxValueInput.value = value[1];
+      }
+    });
+
+    function updateSliderFromInput() {
+      const minValue = Math.max(1, Math.min(parseInt(minValueInput.value, 10) || 1, 20));
+      const maxValue = Math.max(1, Math.min(parseInt(maxValueInput.value, 10) || 20, 20));
+
+      slider.value([minValue, maxValue]);
+
+    }
+
+    minValueInput.addEventListener('change', updateSliderFromInput);
+    maxValueInput.addEventListener('change', updateSliderFromInput);
+  </script>
+
+  <script>
+    document.querySelector('select[name="sortBy"]').addEventListener('change', function () {
+      this.closest('form').submit();
+    });
+  </script>
+</body>
+
+
+</html>

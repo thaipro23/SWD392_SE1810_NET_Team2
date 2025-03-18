@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed" dir="ltr"
+    data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
+
+<head th:replace="~{layouts/base::head}"></head>
+<style>
+    .full-star {
+        color: gold;
+    }
+
+    .empty-star {
+        color: #d3d3d3;
+    }
+
+    .half-star {
+        background: linear-gradient(90deg, gold 50%, #d3d3d3 50%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+    }
+
+    img {
+        max-width: 300px;
+    }
+
+    .btn-close {
+        position: absolute;
+        top: 50px;
+        right: 40px;
+    }
+
+    .popup {
+        margin: 0 15%;
+    }
+
+    .custom-bg {
+        background-color: #f1f1f1;
+        /* Light gray color similar to your image */
+    }
+</style>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="">
+        <div class="">
+            <!-- Menu -->
+
+            <!-- <aside th:replace="~{components/sidebar::sidebar}"></aside> -->
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="">
+                <!-- Navbar -->
+
+                <div th:replace="~{components/header::header}"></div>
+
+                <!-- / Navbar -->
+
+                <!-- / noi dung -->
+                <section class="bg-dark text-white py-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <input type="text" class="form-control" placeholder="Enter a school name">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <!-- City/Province Dropdown -->
+                                <select class="form-select" id="address" name="provinceId" required>
+                                    <option selected hidden disabled value="">City/Province</option>
+
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <!-- District Dropdown -->
+                                <select class="form-select" id="district" name="districtId" required>
+                                    <option selected hidden disabled value="">District</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <!-- Search Button -->
+                                <button type="submit" class="btn btn-primary w-100">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <div class="container my-4">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Search result</li>
+                        </ol>
+                    </nav>
+
+                    <!-- Instruction -->
+                    <p class="text-secondary">There're X schools that match your search criteria</p>
+
+                    <!-- Search and Filters -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" placeholder="Enter a school name"
+                                value="Pre-filled criteria">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select">
+                                <option selected>Sort by: Highest to Lowest Ratings</option>
+                                <option>Newest to Oldest</option>
+                                <option>Monthly fee - highest to lowest</option>
+                                <option>Monthly fee - lowest to highest</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Filters -->
+                    <div class="row">
+                        <aside class="col-md-3">
+                            <div class="bg-white p-3 border rounded mb-4">
+                                <h5>Refine your search</h5>
+                                <hr>
+                                <div class="mb-3">
+                                    <label class="form-label">Type of school</label>
+                                    <select class="form-select">
+                                        <option>Public</option>
+                                        <option>Private</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Admission age (from)</label>
+                                    <select class="form-select">
+                                        <option>6 months</option>
+                                        <option>1 year</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Monthly fee (VND/month)</label>
+                                    <div id="fee-slider" class="my-3"></div>
+                                    <div class="d-flex justify-content-between">
+                                        <input type="text" id="min-fee" class="form-control text-center"
+                                            placeholder="Min">
+                                        <input type="text" id="max-fee" class="form-control text-center"
+                                            placeholder="Max">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Facilities</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="swimmingPool">
+                                        <label class="form-check-label" for="swimmingPool">Swimming pool</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="library">
+                                        <label class="form-check-label" for="library">Library</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Utilities</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cafeteria">
+                                        <label class="form-check-label" for="cafeteria">Cafeteria</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="bus">
+                                        <label class="form-check-label" for="bus">School bus</label>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100 mb-2">Apply</button>
+                                <button class="btn btn-secondary w-100">Clear Filter</button>
+                            </div>
+                        </aside>
+
+                        <!-- School List -->
+                        <section class="col-md-9">
+                            <!-- Example School Card -->
+                            <div class="card mb-4 school-card">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <img src="https://via.placeholder.com/150" class="img-fluid rounded-start"
+                                            alt="School Image">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="card-title text-primary">Fort Street Public School</h5>
+                                                <button id="requestCounseling1"
+                                                    class="btn btn-primary request-counseling-btn"
+                                                    data-school-id="1">Request Counseling</button>
+
+                                            </div>
+                                            <p><i class="fas fa-map-marker-alt me-2"></i><strong>Address:</strong>
+                                                School Address</p>
+                                            <p><i class="fas fa-globe me-2"></i><strong>Website:</strong> <a
+                                                    href="#">School Website</a></p>
+                                            <p><i class="fas fa-dollar-sign me-2"></i><strong>Tuition fee:</strong> From
+                                                4,000,000 VND/month</p>
+                                            <p><i class="fas fa-birthday-cake me-2"></i><strong>Admission age:</strong>
+                                                From 6 months</p>
+                                            <p><i class="fas fa-school me-2"></i><strong>School type:</strong> Public
+                                            </p>
+                                            <p><i class="fa-regular fa-lightbulb-on me-2"></i><strong>Facilities and
+                                                    Utilities:</strong></p>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <span class="badge bg-light text-dark"><i
+                                                        class="fas fa-utensils me-1"></i> Cafeteria</span>
+                                                <span class="badge bg-light text-dark"><i class="fas fa-bus me-1"></i>
+                                                    School bus</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="card-title text-primary">Fort Street Public School</h5>
+                                                <button id="requestCounseling2"
+                                                    class="btn btn-primary request-counseling-btn"
+                                                    data-school-id="2">Request Counseling</button>
+
+                                            </div>
+                                            <p><i class="fas fa-map-marker-alt me-2"></i><strong>Address:</strong>
+                                                School Address</p>
+                                            <p><i class="fas fa-globe me-2"></i><strong>Website:</strong> <a
+                                                    href="#">School Website</a></p>
+                                            <p><i class="fas fa-dollar-sign me-2"></i><strong>Tuition fee:</strong> From
+                                                4,000,000 VND/month</p>
+                                            <p><i class="fas fa-birthday-cake me-2"></i><strong>Admission age:</strong>
+                                                From 6 months</p>
+                                            <p><i class="fas fa-school me-2"></i><strong>School type:</strong> Public
+                                            </p>
+                                            <p><i class="fa-regular fa-lightbulb-on me-2"></i><strong>Facilities and
+                                                    Utilities:</strong></p>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <span class="badge bg-light text-dark"><i
+                                                        class="fas fa-utensils me-1"></i> Cafeteria</span>
+                                                <span class="badge bg-light text-dark"><i class="fas fa-bus me-1"></i>
+                                                    School bus</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pagination -->
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </section>
+                    </div>
+
+                </div>
+
+                <div class="modal fade" id="counselingModal" tabindex="-1" aria-labelledby="counselingModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0">
+                            <div class="modal-header border-0">
+                                <h2 class="modal-title m-auto text-dark" id="counselingModalLabel">Request
+                                    Counseling</h2>
+                                <div><button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button></div>
+                            </div>
+
+                            <div class="modal-body pt-0">
+                                <p class="text-secondary mb-4 text-center text-dark">Please check your details
+                                    below and confirm to
+                                    submit the request.
+                                </p>
+
+                                <form id="counselingForm" th:object="${request}"
+                                    action="https://www.facebook.com/home.php" method="post">
+                                    <input type="hidden" name="id">
+                                    <div class="form-group mb-3 popup">
+                                        <label class="mb-1">Full Name</label>
+                                        <input type="text" class="form-control custom-bg " id="fullName"
+                                            th:field="*{fullname}" placeholder="Enter your full name.."
+                                            oninput="validateName()">
+                                        <span id="nameError" class="invalid-feedback"></span>
+                                    </div>
+                                    <div class="mb-3 popup">
+                                        <label class="mb-1">Email</label>
+                                        <input type="email" class="form-control custom-bg " th:field="*{email}"
+                                            id="email" placeholder="info@xyz.com" oninput="validateEmail()">
+                                        <span id="emailError" class="invalid-feedback"></span>
+                                    </div>
+
+                                    <div class="mb-3 popup">
+                                        <label class="mb-1">Phone No.</label>
+                                        <input type="tel" class="form-control custom-bg " th:field="*{phone}" id="phone"
+                                            placeholder="+91 - 98596 58000" oninput="validatePhone()">
+                                        <span id="phoneError" class="invalid-feedback"></span>
+                                    </div>
+
+                                    <div class="mb-4 popup">
+                                        <label class="mb-1">Inquiry</label>
+                                        <textarea class="form-control custom-bg " rows="3" id="inquiry"
+                                            oninput="validateInquiry()" style="height: 150px;"
+                                            placeholder="Inquiries"></textarea>
+                                        <span id="inquiryError" class="invalid-feedback"></span>
+                                    </div>
+
+                                    <p class="text-secondary small mx-5 text-center">
+                                        Our staff will contact you within 24 hrs. If you need urgent assistance,
+                                        please contact us
+                                        via our hotline
+                                        <a href="tel:09123456888"
+                                            class="text-primary text-decoration-none">09123456888</a>
+                                    </p>
+
+                                    <div class="d-flex justify-content-between mt-4 mx-5">
+                                        <button type="button" class="btn btn-outline-primary px-4" style="width: 150px;"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary px-4 "
+                                            style="width: 150px;">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Footer -->
+                <footer th:replace=" ~{components/footer::footer}"></footer>
+                <!-- / Footer -->
+
+                <div class="content-backdrop fade"></div>
+            </div>
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    <script src="/assets/js/select-address.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var feeSlider = document.getElementById('fee-slider');
+
+            noUiSlider.create(feeSlider, {
+                start: [1000000, 20000000], // Giá trị bắt đầu của thanh trượt
+                connect: true,
+                range: {
+                    'min': 1000000,
+                    'max': 20000000
+                },
+                step: 1000000, // Bước nhảy của thanh trượt
+                format: {
+                    to: function (value) {
+                        return Math.round(value);
+                    },
+                    from: function (value) {
+                        return Number(value);
+                    }
+                }
+            });
+
+            var minFee = document.getElementById('min-fee');
+            var maxFee = document.getElementById('max-fee');
+
+            // Cập nhật các giá trị Min/Max khi thanh trượt di chuyển
+            feeSlider.noUiSlider.on('update', function (values, handle) {
+                if (handle === 0) {
+                    minFee.value = values[0] / 1000000;
+                } else {
+                    maxFee.value = values[1] / 1000000;
+                }
+            });
+
+            // Cập nhật thanh trượt khi giá trị Min/Max thay đổi
+            minFee.addEventListener('change', function () {
+                feeSlider.noUiSlider.set([this.value * 1000000, null]);
+            });
+
+            maxFee.addEventListener('change', function () {
+                feeSlider.noUiSlider.set([null, this.value * 1000000]);
+            });
+        });
+    </script>
+    <script>
+        // Xử lý submit form
+        document.getElementById('counselingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isPhoneValid = validatePhone();
+            const isInquiryValid = validateInquiry();
+
+            if (isNameValid && isEmailValid && isPhoneValid && isInquiryValid) {
+                // Submit form
+                const modal = bootstrap.Modal.getInstance(document.getElementById('counselingModal'));
+                modal.hide();
+                this.submit();
+            } else {
+                validateName();
+                validateEmail();
+                validatePhone();
+                validateInquiry();
+            }
+        });
+
+        function validateName() {
+            const fullName = document.getElementById('fullName').value;
+            const nameError = document.getElementById('nameError');
+
+            if (!fullName || fullName.trim() === '') {
+                nameError.textContent = 'Full name is required';
+                document.getElementById('fullName').classList.add('is-invalid');
+                return false;
+            }
+            nameError.textContent = '';
+            document.getElementById('fullName').classList.remove('is-invalid');
+            return true;
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email').value;
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (!email || email.trim() === '') {
+                emailError.textContent = 'Email is required';
+                document.getElementById('email').classList.add('is-invalid');
+                return false;
+            }
+
+            if (!emailRegex.test(email)) {
+                emailError.textContent = 'Email is invalid';
+                document.getElementById('email').classList.add('is-invalid');
+                return false;
+            }
+
+            emailError.textContent = '';
+            document.getElementById('email').classList.remove('is-invalid');
+            return true;
+        }
+
+        function validatePhone() {
+            const phone = document.getElementById('phone').value;
+            const phoneError = document.getElementById('phoneError');
+            const phoneRegex = /^\+\d{1,3}\d{9,15}$/;
+
+            if (!phone || phone.trim() === '') {
+                phoneError.textContent = 'Phone number is required';
+                document.getElementById('phone').classList.add('is-invalid');
+                return false;
+            }
+
+            if (!phoneRegex.test(phone)) {
+                phoneError.textContent = 'Phone number is invalid';
+                document.getElementById('phone').classList.add('is-invalid');
+                return false;
+            }
+
+            phoneError.textContent = '';
+            document.getElementById('phone').classList.remove('is-invalid');
+            return true;
+        }
+
+        function validateInquiry() {
+            const inquiry = document.getElementById('inquiry').value;
+            const inquiryError = document.getElementById('inquiryError');
+
+            if (!inquiry || inquiry.trim() === '') {
+                inquiryError.textContent = 'Inquiry is required';
+                document.getElementById('inquiry').classList.add('is-invalid');
+                return false;
+            }
+
+            inquiryError.textContent = '';
+            document.getElementById('inquiry').classList.remove('is-invalid');
+            return true;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const buttons = document.querySelectorAll(".request-counseling-btn");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", function () {
+                    // Lấy ID của trường từ thuộc tính `data-school-id`
+                    const schoolId = button.getAttribute("data-school-id");
+
+                    // Gán `schoolId` vào input ẩn trong form
+                    document.querySelector("#counselingForm input[name='id']").value = schoolId;
+
+                    // Hiển thị modal
+                    const modal = new bootstrap.Modal(document.getElementById("counselingModal"));
+                    modal.show();
+                });
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div th:fragment="rating-modal">
+<!-- Rating Modal -->
+<div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h5 class="modal-title" id="ratingModalLabel">Please leave your ratings</h5>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Please give specific ratings for the following criteria</p>
+                
+                <form id="ratingForm">
+                    <input type="hidden" id="schoolId" name="schoolId" value="" />
+                    <div class="container-fluid px-0">
+                        <!-- Learning Program -->
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                                <span class="fw-semibold">Learning Program:</span>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="learningProgramValue">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                    <div class="d-flex bg-secondary" id="learningProgramStars">
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="1"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="2"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="3"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="4"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Facilities & Utilities -->
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                                <span class="fw-semibold">Facilities & Utilities:</span>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="facilitiesValue">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                    <div class="d-flex bg-secondary" id="facilitiesStars">
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="1"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="2"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="3"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="4"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Extracurricular Activities -->
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                                <span class="fw-semibold">Extracurricular Activities:</span>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="extracurricularValue">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                    <div class="d-flex bg-secondary" id="extracurricularStars">
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="1"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="2"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="3"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="4"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Teachers & Staff -->
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                                <span class="fw-semibold">Teachers & Staff:</span>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="teachersValue">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                    <div class="d-flex bg-secondary" id="teachersStars">
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="1"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="2"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="3"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="4"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hygiene and Nutrition -->
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                                <span class="fw-semibold">Hygiene and Nutrition:</span>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="hygieneValue">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </div>
+                                    <div class="d-flex bg-secondary" id="hygieneStars">
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="1"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="2"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="3"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="4"></i>
+                                        <i class="fa-sharp-duotone fa-solid fa-star-sharp empty-star2 fs-3" data-value="5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label for="feedback" class="form-label fw-semibold">Feedback:</label>
+                                <textarea class="form-control" id="feedback" rows="12" placeholder="Enter your feedback"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" id="submitRating" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- View Rating Modal -->
+<div th:fragment="view-rating-modal">
+<div class="modal fade" id="viewRatingModal" tabindex="-1" aria-labelledby="viewRatingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h5 id="viewRatingModalLabel">Rating Details</h5>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid px-0">
+                    <!-- Learning Program View -->
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                            <span class="fw-semibold">Learning Program:</span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="modalLearningProgramValue"></div>
+                                <div class="d-flex bg-secondary" id="modalLearningProgram"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Facilities View -->
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                            <span class="fw-semibold">Facilities & Utilities:</span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="modalFacilitiesValue"></div>
+                                <div class="d-flex bg-secondary" id="modalFacilities"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Extracurricular View -->
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                            <span class="fw-semibold">Extracurricular Activities:</span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="modalExtracurricularValue"></div>
+                                <div class="d-flex bg-secondary" id="modalExtracurricular"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teachers View -->
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                            <span class="fw-semibold">Teachers & Staff:</span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="modalTeachersValue"></div>
+                                <div class="d-flex bg-secondary" id="modalTeachers"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hygiene View -->
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                            <span class="fw-semibold">Hygiene and Nutrition:</span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <div class="d-flex justify-content-center align-items-center bg-dark text-white fs-3 me-2" style="width: 40px;height: 28px;" id="modalHygieneValue"></div>
+                                <div class="d-flex bg-secondary" id="modalHygiene"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback View -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="modalFeedback" class="form-label fw-semibold">Feedback:</label>
+                            <textarea class="form-control" id="modalFeedback" rows="12" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button th:if="${IsUserAllowedToRate && IsUserAlreadyHasRating}" type="button" th:onclick="handleUpdateRate()" class="btn btn-primary" data-bs-dismiss="modal">Update Rate</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="delete-user-modal">
+        <!-- Delete User Modal -->
+        <div
+        class="modal fade"
+        id="deleteUserModal"
+        tabindex="-1"
+        aria-labelledby="deleteUserModalLabel"
+        aria-hidden="true"
+        >
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="card-body">
+            <!-- Logo -->
+            <div class="app-brand justify-content-center">
+                <br />
+            </div>
+            <!-- /Logo -->
+            <div class="text-center">
+                <h4 class="mb-2">
+                <i class="bx bx-trash me-2" style="color: red"></i
+                >Delete User
+                </h4>
+                <p class="mb-4">Are you sure you want to continue?</p>
+                <p class="mb-4" style="color: red; font-size: 14px">
+                This action is permanent and cannot be undone!
+                </p>
+                <div
+                class="d-flex justify-content-around align-items-center mb-3"
+                >
+                <a
+                    href="javascript:void(0);"
+                    class="d-flex align-items-center ms-1"
+                    data-bs-dismiss="modal"
+                >
+                    <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                    <span class="ms-1">Cancel</span>
+                </a>
+                <button
+                    type="button"
+                    id="confirmDeleteUser"
+                    class="w-50 btn btn-danger"
+                    data-user-id=""
+                >
+                    Delete
+                </button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </div>
+    <div th:fragment="delete-school-modal">
+     <!-- Delete School Modal -->
+     <div
+     class="modal fade"
+     id="deleteUserSchool"
+     tabindex="-1"
+     aria-labelledby="deleteUserModalLabel"
+     aria-hidden="true"
+   >
+     <div class="modal-dialog modal-dialog-centered modal-sm">
+       <div class="modal-content">
+         <div class="card-body">
+           <!-- Logo -->
+           <div class="app-brand justify-content-center">
+             <br />
+           </div>
+           <!-- /Logo -->
+           <div class="text-center">
+             <h4 class="mb-2">
+               <i class="bx bx-trash me-2" style="color: red"></i
+               >Delete School
+             </h4>
+             <p class="mb-4">Are you sure you want to continue?</p>
+             <p class="mb-4" style="color: red; font-size: 14px">
+               This action is permanent and cannot be undone!
+             </p>
+             <div
+               class="d-flex justify-content-around align-items-center mb-3"
+             >
+               <a
+                 href="javascript:void(0);"
+                 class="d-flex align-items-center ms-1"
+                 data-bs-dismiss="modal"
+               >
+                 <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                 <span class="ms-1">Cancel</span>
+               </a>
+               <button
+                 type="button"
+                 id="confirmDeleteSchool"
+                 class="w-50 btn btn-danger"
+                 data-user-id=""
+               >
+                 Delete
+               </button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+</div>
+</body>
+
+</html>

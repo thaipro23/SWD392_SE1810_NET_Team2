@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head></head>
+
+<body th:fragment="header">
+  <!-- Navbar -->
+
+  <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+    id="layout-navbar">
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+      <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+        <i class="bx bx-menu bx-sm"></i>
+      </a>
+    </div>
+
+    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+      <!-- Search -->
+      <div class="navbar-nav align-items-center">
+        <div class="nav-item d-flex align-items-center">
+            <a th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools/add'}" style="color: black;">
+            <i class="fa-solid fa-circle-plus"></i>
+            <span class="ms-2">New School</span>
+            </a>
+        </div>
+      </div>
+      <!-- /Search -->
+
+      <ul class="navbar-nav flex-row align-items-center ms-auto">
+        <!-- Place this tag where you want the button to render. -->
+        <li class="nav-item lh-1 me-3">
+          <i class="fa-solid fa-bell"></i>
+        </li>
+
+        <!-- User -->
+        <a href="/auth/login" th:if="${currentUser == null}">Login</a>
+        <a class="mx-2" href="/auth/register" th:if="${currentUser == null}">| Sign Up</a>
+        <li th:if="${currentUser != null}" class="nav-item navbar-dropdown dropdown-user dropdown">
+          <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+            <div class="avatar avatar-online">
+              <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="/auth/profile">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="avatar avatar-online">
+                      <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <span class="fw-semibold d-block" th:text="${currentUser.fullname}">John Doe</span>
+                    <small class="text-muted" th:text="${currentUser.role}">Admin</small>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li>
+              <div class="dropdown-divider"></div>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/auth/profile">
+                <i class="bx bx-user me-2"></i>
+                <span class="align-middle">My Profile</span>
+              </a>
+            </li>
+            <li>
+              <div class="dropdown-divider"></div>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <i class="bx bx-power-off me-2"></i>
+                <span class="align-middle">Log Out</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+        <!--/ User -->
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center">
+            <br>
+          </div>
+          <!-- /Logo -->
+          <div class="text-center">
+            <h4 class="mb-2">Are you leaving?</h4>
+            <p class="mb-4">Are you sure you want to logout? All your unsaved data will be lost.</p>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <a href="javascript:void(0);" class="d-flex align-items-center ms-1" data-bs-dismiss="modal">
+                <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                <span class="ms-1">Cancel</span>
+              </a>
+              <a type="button" href="/auth/logout" class="w-50 btn btn-primary">Yes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / Navbar -->
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<head></head>
+
+<body th:fragment="header">
+  <!-- Navbar -->
+  <nav
+    class="navbar navbar-expand-lg rounded navbar-light container-xxl navbar-detached align-items-center bg-navbar-theme mt-4">
+    <div class="container-fluid">
+      <a href="/homepage" class="app-brand-link">
+        <span class="app-brand-logo demo">
+          <img src="/assets/img/favicon/favicon.png" alt class="w-px-75 h-auto" />
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-4 my-3">
+            <a class="active" aria-current="page" href="/search">School Search</a>
+          </li>
+          <li class="nav-item mx-4 my-3">
+            <a class="" href="/homepage#testimonials">Community</a>
+          </li>
+          <li class="nav-item mx-4 my-3">
+            <a class="" href="/homepage#about-us">About Us</a>
+          </li>
+          <li class="nav-item mx-4 my-3" th:if="${currentUser !=null && currentUser.role.name!='PARENT'}">
+            <a class="" href="/">Management</a>
+          </li>
+        </ul>
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+          class="bi bi-person mx-2 nav-item" viewBox="0 0 16 16">
+          <path
+            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+        </svg>
+        <a href="/auth/login" th:if="${currentUser == null}">Login</a>
+        <a class="mx-2 nav-item" href="/auth/register" th:if="${currentUser == null}">| Sign Up</a>
+        <div th:if="${currentUser != null}" class="nav-item navbar-dropdown dropdown-user dropdown">
+          <a class="dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
+            th:text="'Welcome! '+${currentUser.fullname}">
+            Welcome!
+          </a>
+          <a class="dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"><i
+              class="fa-solid fa-chevron-down"></i></a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <a class="dropdown-item" href="/auth/profile">
+              <div class="d-flex">
+                <div class="flex-shrink-0 me-3">
+                  <div class="avatar avatar-online">
+                    <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <span class="fw-semibold d-block" th:text="${currentUser.fullname}">John Doe</span>
+                  <small class="text-muted" th:text="${currentUser.role}">Admin</small>
+                </div>
+              </div>
+            </a>
+            <li>
+              <div class="dropdown-divider"></div>
+            </li>
+            <li>
+              <a class="dropdown-item row" href="/parent/my_schools">
+                <i class="fa-solid fa-school col-md-2"></i>
+                <span class="align-middle">My School</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/parent/myRequest">
+                <span class="d-flex align-items-center align-middle row">
+                  <i class="fa-regular fa-bell col-md-2"></i>
+                  <span class="flex-grow-1 align-middle col-md-8">My Requests</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item row" href="/auth/profile">
+                <i class="bx bx-user col-md-2"></i>
+                <span class="align-middle">My Profile</span>
+              </a>
+            </li>
+            <li>
+              <div class="dropdown-divider"></div>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                <i class="bx bx-power-off me-2"></i>
+                <span class="align-middle">Log Out</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center">
+            <br>
+          </div>
+          <!-- /Logo -->
+          <div class="text-center">
+            <h4 class="mb-2">Are you leaving?</h4>
+            <p class="mb-4">Are you sure you want to logout? All your unsaved data will be lost.</p>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <a href="javascript:void(0);" class="d-flex align-items-center ms-1" data-bs-dismiss="modal">
+                <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                <span class="ms-1">Cancel</span>
+              </a>
+              <a type="button" href="/auth/logout" class="w-50 btn btn-primary">Yes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / Navbar -->
+  <!-- Chat Widget-->
+  <div class="position-fixed bottom-0 end-0 m-3" style="z-index: 1050;">
+    <style>
+      #chat-widget .badge {
+        text-transform: none;
+      }
+    </style>
+    <div class="card shadow-lg" id="chat-widget" style="width: 300px; display: none;">
+      <div class="card-header bg-primary text-white d-flex align-items-center" id="close-header">
+        <span class="flex-grow-1">Chat with us!</span>
+        <button class="btn-close btn-close-white" aria-label="Close" id="close-chat"></button>
+      </div>
+
+      <div class="card-body p-2" id="chat-messages"
+           style="height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word;">
+      </div>
+
+      <div class="p-2" id="faq-section" style="border-top: 1px solid #ddd; max-height: 150px; overflow-y: auto;">
+        <small class="text-muted">Frequently Asked Questions:</small>
+        <div id="faq-list" class="mt-2"></div>
+      </div>
+      <div class="card-footer">
+      </div>
+    </div>
+    <button class="btn btn-primary rounded-circle shadow-lg" id="chat-toggle" style="height: 55px;">
+      <i class="fas fa-comments"></i>
+    </button>
+  </div>
+
+</body>
+
+</html>

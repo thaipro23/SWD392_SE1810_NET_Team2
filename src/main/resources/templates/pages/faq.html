@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="https://www.thymeleaf.org"
+        lang="en"
+        class="light-style layout-menu-fixed"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="/assets/"
+        data-template="vertical-menu-template-free"
+>
+
+<head th:replace="~{layouts/base::head}">
+</head>
+<body>
+<div th:replace="~{components/header-parent::header}"></div>
+<div class="container my-5">
+  <div class="content-wrapper">
+    <div class="text-center">
+      <h1>Frequently Asked Questions</h1>
+      <input type="text"
+             class="form-control col-lg-10" placeholder="Search">
+    </div>
+
+    
+
+  </div>
+</div>
+
+
+<footer th:replace="~{components/footer::footer}"></footer>
+</body>
+</html>

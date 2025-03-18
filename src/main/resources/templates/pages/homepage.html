@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed" dir="ltr"
+    data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
+
+<head th:replace="~{layouts/base::head}"></head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="">
+        <div class="">
+            <!-- Menu -->
+
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="">
+                <!-- Navbar -->
+
+                <div th:replace="~{components/header-parent::header}"></div>
+
+                <!-- / Navbar -->
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <!-- Layout Demo -->
+
+                        <div id="" class="position-relative">
+                            <img class="d-none d-lg-block" src="/assets/img/backgrounds/background-homepage.jpg"
+                                alt="First slide" width="100%">
+                            <div class="container position-lg-absolute top-lg-50 start-lg-50 translate-middle-lg">
+                                <div class="d-flex justify-content-center">
+                                    <div class="p-4 rounded bg-light-opacity-90 w-75 text-center">
+                                        <h1 class="text-center mb-5">Find the ideal school</h1>
+
+                                        <!-- Start form to submit searchRequest -->
+                                        <form method="POST" action="/homepage" th:object="${searchRequest}">
+                                            <h3 class="text-center mb-4">Search by school name</h3>
+                                            <div class="d-flex justify-content-center">
+                                                <div class="input-group w-75 row">
+                                                    <!-- Bind the name attribute to searchRequest.name -->
+                                                    <input type="text" id="school-search-input" th:field="*{name}"
+                                                        class="form-control col-lg-10" placeholder="Enter a school name"
+                                                        aria-label="Enter a school name"
+                                                        aria-describedby="button-addon2">
+                                                    <button class="btn btn-primary col-lg-2" type="submit"
+                                                        id="button-addon2">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <h2 class="text-center mt-4">OR</h2>
+                                        <h3 class="text-center mb-4">Browse by location</h3>
+                                        <form method="POST" action="/homepage" th:object="${searchRequest}">
+
+                                            <div class="d-flex justify-content-center">
+                                                <div class="row w-75">
+                                                    <div class="col-lg-5 px-0">
+                                                        <select class="btn btn-outline-primary dropdown-toggle select2-form"
+                                                            id="address" name="provinceId">
+                                                            <option selected="" hidden="" disabled="" value="">
+                                                                City/Province
+                                                            </option>
+                                                            <option class="bg-light text-dark"
+                                                                th:each="province : ${provinces}"
+                                                                th:value="${province.id}" th:text="${province.name}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-5 px-0">
+                                                        <select class="btn btn-outline-primary select2-form" id="district"
+                                                            name="districtId" aria-expanded="false">
+                                                            <option selected="" hidden="" disabled="" value="">District
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit"
+                                                        class="btn btn-primary col-lg-2">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!-- End form -->
+                                            <p style="color: #ff3e1d; margin-top: 10px;" th:text="${errorMessage}"></p>
+                                        <p class="mt-4"><em>NOTE: The inclusion of a school in this search does NOT
+                                                constitute an endorsement<br>
+                                                of the school and should NOT be used to infer the accreditation status
+                                                of the school</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Carousel wrapper -->
+                        <div id="testimonials" class="carousel slide carousel-dark mt-5" data-mdb-ride="carousel">
+                            <div class="text-center">
+                                <h1>Our testimonials</h1>
+                            </div>
+                            <!-- Inner -->
+                            <div class="carousel-inner py-4">
+                                <!-- Single item -->
+                                <div class="carousel-item active">
+                                    <div class="container">
+                                        <div class="row d-flex justify-content-around">
+                                            <div th:each="rating : ${ratings}"
+                                                class="col-lg-5 d-flex justify-content-start mb-5">
+                                                <div class="mx-3">
+                                                    <img class="rounded-circle shadow-1-strong mb-4"
+                                                        src="https://img.freepik.com/vecteurs-premium/caricature-profil-homme-affaires_18591-58479.jpg?semt=ais_hybrid"
+                                                        alt="avatar" style="width: 100px;" />
+                                                </div>
+                                                <div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <h5 class="mb-3" th:text="${rating.parent.fullname}">Anna Deynah
+                                                        </h5>
+                                                        <ul
+                                                            class="list-unstyled d-flex justify-content-center text-warning mb-0">
+                                                            <li
+                                                                th:each="star : ${#numbers.sequence(1, T(java.lang.Math).round(rating.avgRating))}">
+                                                                <i class="fas fa-star fa-sm"></i>
+                                                            </li>
+                                                            <li th:each="emptyStar : ${#numbers.sequence(T(java.lang.Math).round(rating.avgRating) + 1, 5)}"
+                                                                th:if="${rating.avgRating < 4.5}">
+                                                                <i class="far fa-star fa-sm"></i>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <p th:text="${rating.feedback}">
+                                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod
+                                                        eos id officiis hic tenetur quae
+                                                        quaerat ad velit ab hic tenetur.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Inner -->
+                        </div>
+                        <!-- Carousel wrapper -->
+
+                        <!--About Us -->
+                        <div id="about-us" class="container-p-y bg-about-us">
+                            <div class="text-center mb-5">
+                                <h1>About Us</h1>
+                            </div>
+                            <div class="d-flex justify-content-around mx-5 row">
+                                <div class=" bg-light col-md-3 my-2 rounded">
+                                    <div class="my-4 mx-3">
+                                        <div class="d-flex flex-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5m1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0M1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5" />
+                                            </svg>
+                                            <h5 class="mx-2"><strong>Our school Networks</strong></h5>
+                                        </div>
+                                        <h5 class="text-center">800 +</br>
+                                            Preschools and Kindergarten</h5>
+                                        <small>Search for a preschool for your child based on basic criteria such
+                                            as:
+                                            quality,review of other parents, location, tuition fees,
+                                            ...<br><br><br><br><br><br><br></small>
+                                    </div>
+                                </div>
+                                <div class=" bg-light col-md-3 my-2 rounded">
+                                    <div class="my-4 mx-3">
+                                        <div class="d-flex flex-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                                                <path
+                                                    d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                            </svg>
+                                            <h5 class="mx-2"><strong>Parent community</strong></h5>
+                                        </div>
+                                        <h5 class="text-center">1500 +</br>
+                                            School profiles of parents and kids</h5>
+                                        <small>Close connection with to parents through multiple channels including
+                                            email, chat and phone calls. Get feedback from parents to provide a
+                                            comprehensive view</small>
+                                    </div>
+                                </div>
+                                <div class=" bg-light col-md-3 my-2 rounded">
+                                    <div class="my-4 mx-3">
+                                        <div class="d-flex flex-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
+                                            </svg>
+                                            <h5 class="mx-2"><strong>Special Consultations</strong></h5>
+                                        </div>
+                                        <h5 class="text-center">30+</br>
+                                            Consultants with 5-10 yrs of experience in education</h5>
+                                        <small>Our consultant with deep knowledge on pre-school education will help
+                                            parents to choose the right school for their children</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="my-5"></div>
+                        </div>
+                        <!--/ About Us-->
+
+                        <!--End-->
+                        <div class="ps-4">
+                            <div class="d-flex justify-content-between my-5">
+                                <div class="text-center">
+                                    <h2 class="mb-5">COME VISIT US</h2>
+                                    <p>21TH FL, EDUCATION TOWER,</br>
+                                        BACH MAI WARD, HAI BA TRUNG DIST, HANOI</p>
+                                </div>
+                                <div class="text-center w-50 d-flex justify-content-end">
+                                    <div class="w-75">
+                                        <h2 class="mb-5">OUR PARTNERS</h2>
+                                        <div class="d-flex justify-content-between row">
+                                            <div class="col-md-4">
+                                                <div>
+                                                    <i class='fas fa-graduation-cap fa-3x'></i>
+                                                </div>
+                                                <small>Ministry of Education</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div>
+                                                    <img src="/assets/img/icons/brands/CBS-01.png" alt="facebook"
+                                                        class="me-3" height="45" />
+                                                </div>
+                                                <small>Education News</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45"
+                                                        fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612" />
+                                                    </svg>
+                                                </div>
+                                                <small>Kids Center</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ End-->
+
+
+
+                        <!--/ Layout Demo -->
+                    </div>
+                    <!-- / Content -->
+
+                    <!-- Footer -->
+                    <footer th:replace=" ~{components/footer::footer}"></footer>
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    <script src="/assets/js/select2.min.js"></script>
+    <script src="/assets/js/select2-custom.js"></script>
+    <script src="/assets/js/select-address.js"></script>
+</body>
+
+</html>

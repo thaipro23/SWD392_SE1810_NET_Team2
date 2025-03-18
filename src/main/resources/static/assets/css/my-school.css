@@ -1,0 +1,23 @@
+.full-star {
+    color: gold;
+}
+
+.empty-star {
+    color: #d3d3d3;
+}
+.empty-star2 {
+    color: white;
+}
+
+.half-star {
+    background: linear-gradient(90deg, gold 50%, #d3d3d3 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+.bg-warning-half{
+    background: linear-gradient(90deg, gold 50%, white 50%);
+}
+#img{
+    height: 200px;
+}

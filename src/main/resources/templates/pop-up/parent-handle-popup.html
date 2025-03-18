@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body th:fragment="handle-enroll">
+    <div class="modal fade" id="cancelPendingModal" tabindex="-1" aria-labelledby="cancelPendingModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title m-auto text-dark" id="cancelPendingModalLabel">Do you want to cancel the
+                        pending approval?
+                    </h4>
+                    <div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body pt-0">
+                    <form id="cancelEnrollForm" th:action="@{/parent/cancel}" method="post">
+                        <input type="hidden" name="schoolId" id="cancelSchoolId">
+                        <div class="d-flex justify-content-between mt-4 mx-5">
+                            <button type="button" class="btn btn-outline-primary px-4" style="width: 150px;"
+                                data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-primary px-4" style="width: 150px;">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title m-auto text-dark" id="enrollModalLabel">Do you want to enroll this school?
+                    </h4>
+                    <div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body pt-0">
+                    <form id="enrollForm" th:action="@{/parent/pending}" method="post">
+                        <input type="hidden" name="schoolId" id="modalSchoolId">
+                        <div class="d-flex justify-content-between mt-4 mx-5">
+                            <button type="button" class="btn btn-outline-primary px-4" style="width: 150px;"
+                                data-bs-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-primary px-4" style="width: 150px;">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

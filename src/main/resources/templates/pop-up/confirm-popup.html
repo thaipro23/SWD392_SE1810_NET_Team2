@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <div th:fragment="confirm-modal">
+        <!-- Confirm Modal -->
+        <div
+        class="modal fade"
+        id="actionModal"
+        tabindex="-1"
+        aria-labelledby="actionModalLabel"
+        aria-hidden="true"
+        >
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h4 id="modalTitle" class="mb-2 fw-bold"></h4>
+              <p id="modalMessage" class="mb-4"></p>
+              <div
+                class="d-flex justify-content-around align-items-center mb-3 small"
+              >
+                <a
+                  href="javascript:void(0);"
+                  class="d-flex align-items-center ms-1 text-primary"
+                  data-bs-dismiss="modal"
+                >
+                  <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                  <span class="ms-1 fw-bold">No.Take me back!</span>
+                </a>
+                <button
+                  type="button"
+                  id="confirmAction"
+                  class="w-50 btn btn-primary fw-bold"
+                  data-action-url=""
+                >
+                  Yes.Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+        </body>
+        
+        </html>

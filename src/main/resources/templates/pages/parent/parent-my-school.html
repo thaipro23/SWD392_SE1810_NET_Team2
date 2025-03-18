@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed" dir="ltr"
+    data-theme="theme-default" data-assets-path="/assets/" data-template="vertical-menu-template-free">
+
+<head th:replace="~{layouts/base::head}">
+</head>
+<link rel="stylesheet" href="/assets/css/my-school.css" />
+<body>
+                <!-- Navbar -->
+                <div th:replace="~{components/header-parent::header}"></div>
+                <!-- / Navbar -->
+    <!-- Breadcrumb -->
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/homepage">Home</a></li>
+                <li class="breadcrumb-item active">My Schools</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Main Content -->
+    <div class="container" style="min-height: 70vh;">
+        <h1 class="mb-4">My Schools</h1>
+    
+        <!-- Tabs -->
+        <ul class="nav nav-tabs border-bottom mb-4" id="schoolTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-medium" id="current-tab" data-bs-toggle="tab" data-bs-target="#current" type="button">
+                    Current Schools
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link text-secondary" id="previous-tab" data-bs-toggle="tab" data-bs-target="#previous" type="button">
+                    Previous Schools
+                </button>
+            </li>
+        </ul>
+    
+        <!-- Tab Content -->
+        <div class="tab-content  border-primary"style="padding:0px" id="schoolTabsContent">
+            <!-- Current Schools Tab -->
+            <div class="tab-pane fade show active " id="current" role="tabpanel">
+                <div class="row mb-4" th:each="school : ${schoolsPageCurrent}">
+                    <!-- School Card -->
+                    <div class="col-xxl-9">
+                        <div class="card rounded-3 shadow-sm border-primary">
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <div class="col-xxl-4 mb-3">
+                                        <a th:href="@{/parent/school-detail/{schoolId}(schoolId=${school.schoolEnrollment.school.id})}" >
+                                            <div id="img">
+                                            <img th:src="${school.schoolEnrollment.school.images.size() > 0 ? school.schoolEnrollment.school.images[0]?.url : '/assets/img/backgrounds/no-image.jpg'}" alt="School Image" class="img-fluid rounded mb-2" style="object-fit: cover; width: 100%; height: 100%">
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <div class="text-warning mb-1">
+                                                <span th:each="i : ${#numbers.sequence(1, 5)}" class="fa-sharp-duotone fa-solid fa-star-sharp"
+                                                    th:classappend="${i <= T(java.lang.Math).ceil(school.schoolEnrollment.school.getRating()*2)/2 ? 'full-star' : i < school.schoolEnrollment.school.getRating()+1 ? 'half-star' : 'empty-star'}">
+                                                </span>
+                                                <span class="text-dark ms-2" th:text="${#numbers.formatDecimal(T(java.lang.Math).ceil(school.schoolEnrollment.school.getRating() * 2) / 2, 0, 'COMMA', 1, 'POINT')} + '/5 (' + ${school.schoolEnrollment.school.totalRatingCount} + ' ratings)'">5.0/5 (120 ratings)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-8">
+                                        <a th:href="@{/parent/school-detail/{schoolId}(schoolId=${school.schoolEnrollment.school.id})}">
+                                            <h3 class="fw-bold text-decoration-underline mb-2" style="margin: 0;color: #18A0FB;" th:text="${school.schoolEnrollment.school.name}">Fort Street Public School</h3>
+                                        </a>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-location-dot me-2" ></i>Address:
+                                            </div>
+                                            <div class="col-md-9" th:text="${school.schoolEnrollment.school.address}">
+                                                24 Fordham Avenue CAMBERWELL VIC 3124
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-earth-americas me-2"></i>Website:
+                                            </div>
+                                            <div class="col-md-9">
+                                                <a href="#" class="text-decoration-underline" th:text="${school.schoolEnrollment.school.email.substring(0, school.schoolEnrollment.school.email.indexOf('@')) + '.edu.vn'}" style="color: #18A0FB;">FortStreet.school.edu</a>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-circle-dollar me-2"></i>Tuition fee:
+                                            </div>
+                                            <div class="col-md-9" th:text="'From ' + ${#numbers.formatDecimal(school.schoolEnrollment.school.feeFrom, 0, 'COMMA', 0, 'POINT')} + 'VND/ month To ' + ${#numbers.formatDecimal(school.schoolEnrollment.school.feeTo, 0, 'COMMA', 0, 'POINT')} + 'VND/ month'"
+                                            >
+                                                From 4,000,000 VND/month
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-circle-bookmark me-2"></i>Admission age:
+                                            </div>
+                                            <div class="col-md-9"  th:with="range=${school.schoolEnrollment.school.childAge.name}">
+                                                <div th:if="${range == '6m - 1y'}">
+                                                    From 6 months to 1 year
+                                                </div>
+                                                <div th:if="${range == '1-3y'}">
+                                                    From 1 year to 3 years
+                                                </div>
+                                                <div th:if="${range == '3-6y'}">
+                                                    From 3 years to 6 years
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fal fa-light fa-landmark me-2"></i>School type:
+                                            </div>
+                                            <div class="col-md-9" th:text="${school.schoolEnrollment.school.schoolType.name}">
+                                                Public
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <i class="fa-regular fa-lightbulb-on me-2"></i>Facilities and Utilities:
+                                            </div>
+                                            <div class="col-md-9">
+                                                <th:block th:each="facility : ${school.schoolEnrollment.school.facilities}">
+                                                    <span class="badge bg-label-info border me-2 mb-2" th:text="${facility.name}" style="color: #18A0FB;"></span>
+                                                </th:block>
+                                                <th:block th:each="utility : ${school.schoolEnrollment.school.utilities}">
+                                                    <span class="badge bg-label-info border me-2 mb-2" th:text="${utility.name}" style="color: #18A0FB;"></span>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Rating Box -->
+                    <div class="col-xxl-3">
+                        <div class="card rounded-3 shadow-sm border-primary h-100" th:if="${school.rating == 0.0}">
+                                <div class="card-body d-flex flex-column justify-content-around p-4">
+                                    <p class="fw-bold mb-4 fs-5 " style="color: #18A0FB;">
+                                        You haven't rated the school yet. Please share with us your feedback
+                                    </p>
+                                    <div class="d-flex justify-content-center">
+                                        <button th:onclick="'openCreateRatingModal('+${school.schoolEnrollment.school.id}+')'" class="btn btn-primary rounded-sm w-100">Rate School</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Average Rating Card -->
+                                <div class="card rounded-3 shadow-sm border-primary h-100" th:unless="${school.rating == 0.0}">
+                                    <div class="card-body d-flex flex-column justify-content-around p-4 text-center">
+                                        <div>
+                                        <h6 class="fw-bold fs-5" style="color: #18A0FB;">Your Average Rating</h6>
+                                        <p class="text-center fw-semibold mb-3" th:text="${#numbers.formatDecimal(T(java.lang.Math).ceil(school.rating* 2) / 2, 0, 'COMMA', 1, 'POINT')} + '/5 '">4.5/5</p>
+                                        <div class="text-warning mb-2 fs-4">
+                                            <span th:each="i : ${#numbers.sequence(1, 5)}" class="fa-sharp-duotone fa-solid fa-star-sharp"
+                                            th:classappend="${i <= T(java.lang.Math).ceil(school.rating*2)/2 ? 'full-star' : i < school.rating+1 ? 'half-star' : 'empty-star'}">
+                                        </span>
+                                        </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <a th:href="@{'/parent/school-detail/' + ${school.schoolEnrollment.school.id} + '#navs-top-rating'}">
+                                            <button  class="btn btn-outline-primary px-4 rounded-sm w-100 ">View Rating Details</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                <!-- Pagination -->
+<nav aria-label="Page navigation example" id="pagination" th:if="${totalPages > 1}">
+    <ul class="pagination justify-content-center">
+      <!-- Previous Button -->
+      <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+        <a class="page-link" 
+           th:data-page="${currentPage -1}"
+           th:href="@{'/admin/users?page=' + (${currentPage} - 1) }">
+           <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+  
+      <!-- First Page - Always show -->
+      <li class="page-item" th:classappend="${currentPage == 1} ? 'active' : ''">
+        <a class="page-link" 
+           th:data-page="1"
+           th:href="@{'/admin/users?page=1}">1</a>
+      </li>
+  
+      <!-- Left Ellipsis -->
+      <li class="page-item disabled" th:if="${currentPage > 3}">
+        <span class="page-link">...</span>
+      </li>
+  
+      <!-- Pages around current -->
+      <th:block th:with="start=${currentPage <=3 ? 2 : currentPage - 2 },
+                        end=${currentPage + 2 < totalPages ? currentPage + 2 : totalPages - 1}">
+        <li class="page-item" 
+            th:each="i : ${#numbers.sequence(start, end)}"
+            th:if="${i > 1 && i < totalPages}"
+            th:classappend="${currentPage == i} ? 'active' : ''">
+          <a class="page-link"
+             th:data-page="${i}"
+             th:href="@{'/admin/users?page=' + ${i}}"
+             th:text="${i}"></a>
+        </li>
+      </th:block>
+  
+      <!-- Right Ellipsis -->
+      <li class="page-item disabled" th:if="${currentPage + 2 < totalPages - 1}">
+        <span class="page-link">...</span>
+      </li>
+  
+      <!-- Last Page - Always show if total pages > 1 -->
+      <li class="page-item" th:if="${totalPages > 1}" 
+          th:classappend="${currentPage == totalPages} ? 'active' : ''">
+        <a class="page-link"
+           th:data-page="${totalPages}"
+           th:href="@{'/admin/users?page=' + ${totalPages} }"
+           th:text="${totalPages}"></a>
+      </li>
+  
+      <!-- Next Button -->
+      <li class="page-item" 
+          th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+        <a class="page-link"
+           th:data-page="${currentPage + 1}"
+           th:href="@{'/admin/users?page=' + (${currentPage} + 1) }">
+           <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+            </div>
+    
+            <!-- Previous Schools Tab -->
+            <div class="tab-pane fade" id="previous" role="tabpanel">
+                <!-- Display the number of schools before the list -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <p class="text-muted" style="font-size: 14px;">There's <span th:text="${count}"></span> schools that you previously enrolled in.</p>
+                    </div>
+                </div>
+                <div class="row mb-4" th:each="school : ${schoolsPagePrevious}">
+                    <!-- School Card -->
+                    <div class="col-xxl-9">
+                        <div class="card rounded-3 shadow-sm border-primary">
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <div class="col-xxl-4 mb-3">
+                                        <a th:href="@{/parent/school-detail/{schoolId}(schoolId=${school.schoolEnrollment.school.id})}" >
+                                            <div id="img">
+                                            <img th:src="${school.schoolEnrollment.school.images.size() > 0 ? school.schoolEnrollment.school.images[0]?.url : '/assets/img/backgrounds/no-image.jpg'}" alt="School Image" class="img-fluid rounded mb-2" style="object-fit: cover; width: 100%; height: 100%">
+                                            </div>
+                                        </a>
+                                        <div class="text-warning mb-1">
+                                            <span th:each="i : ${#numbers.sequence(1, 5)}" class="fa-sharp-duotone fa-solid fa-star-sharp"
+                                                th:classappend="${i <= T(java.lang.Math).ceil(school.schoolEnrollment.school.getRating()*2)/2 ? 'full-star' : i < school.schoolEnrollment.school.getRating()+1 ? 'half-star' : 'empty-star'}">
+                                            </span>
+                                            <span class="text-dark ms-2" th:text="${#numbers.formatDecimal(T(java.lang.Math).ceil(school.schoolEnrollment.school.getRating() * 2) / 2, 0, 'COMMA', 1, 'POINT')} + '/5 (' + ${school.schoolEnrollment.school.totalRatingCount} + ' ratings)'">5.0/5 (120 ratings)</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-8">
+                                        <a th:href="@{/parent/school-detail/{schoolId}(schoolId=${school.schoolEnrollment.school.id})}">
+                                            <h3 class="fw-bold text-decoration-underline" th:text="${school.schoolEnrollment.school.name}" style="color: #18A0FB;margin: 0;">Fort Street Public School</h3>
+                                        </a>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-location-dot me-2"></i>Address:
+                                            </div>
+                                            <div class="col-md-9" th:text="${school.schoolEnrollment.school.address}">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-earth-americas me-2"></i>Website:
+                                            </div>
+                                            <div class="col-md-9">
+                                                <a href="#" class="text-decoration-underline" th:text="${school.schoolEnrollment.school.email.substring(0, school.schoolEnrollment.school.email.indexOf('@')) + '.edu.vn'}" style="color: #18A0FB;">FortStreet.school.edu</a>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-circle-dollar me-2"></i>Tuition fee:
+                                            </div>
+                                            <div class="col-md-9" th:text="'From ' + ${#numbers.formatDecimal(school.schoolEnrollment.school.feeFrom, 0, 'COMMA', 0, 'POINT')} + 'VND/ month To ' + ${#numbers.formatDecimal(school.schoolEnrollment.school.feeTo, 0, 'COMMA', 0, 'POINT')} + 'VND/ month'"
+                                            >
+                                                From 4,000,000 VND/month
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fa-light fa-circle-bookmark me-2"></i>Admission age:
+                                            </div>
+                                            <div class="col-md-9"th:with="range=${school.schoolEnrollment.school.childAge.name}">
+                                                <div th:if="${range == '6m - 1y'}">
+                                                    From 6 months to 1 year
+                                                </div>
+                                                <div th:if="${range == '1-3y'}">
+                                                    From 1 year to 3 years
+                                                </div>
+                                                <div th:if="${range == '3-6y'}">
+                                                    From 3 years to 6 years
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-3">
+                                                <i class="menu-icon fal fa-light fa-landmark me-2"></i>School type:
+                                            </div>
+                                            <div class="col-md-9" th:text="${school.schoolEnrollment.school.schoolType.name}">
+                                                Public
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <i class="fa-regular fa-lightbulb-on me-2"></i>Facilities and Utilities:
+                                            </div>
+                                            <div class="col-md-9">
+                                                <th:block th:each="facility : ${school.schoolEnrollment.school.facilities}">
+                                                    <span class="badge bg-label-info border me-2 mb-2" th:text="${facility.name}" style="color: #18A0FB;"></span>
+                                                </th:block>
+                                                <th:block th:each="utility : ${school.schoolEnrollment.school.utilities}">
+                                                    <span class="badge bg-label-info border me-2 mb-2" th:text="${utility.name}" style="color: #18A0FB;"></span>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Rating Box -->
+                    <div class="col-xxl-3">
+                        <div class="card rounded-3 shadow-sm border-primary h-100" th:if="${school.rating == 0.0}">
+                                <div class="card-body d-flex flex-column justify-content-around p-4">
+                                    <p class="fw-bold mb-4 fs-5" style="color: #18A0FB;">
+                                        There's no rating of your for this school.You can only rate the school you're currently enrolled in 
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Average Rating Card -->
+                                <div class="card rounded-3 shadow-sm border-primary h-100" th:unless="${school.rating == 0.0}">
+                                    <div class="card-body d-flex flex-column justify-content-around p-4 text-center">
+                                        <div>
+                                        <h6 class="fw-bold fs-5" style="color: #18A0FB;">Your Average Rating</h6>
+                                        <span class="ms-2"
+                                        th:text="${#numbers.formatDecimal(T(java.lang.Math).ceil(school.rating*2) / 2, 0, 'COMMA', 1, 'POINT')} + '/5'">
+                                            </span>
+                                        <div class="text-warning mb-2 fs-4">
+                                            <span th:each="i : ${#numbers.sequence(1, 5)}" class="fa-sharp-duotone fa-solid fa-star-sharp"
+                                            th:classappend="${i <= T(java.lang.Math).ceil(school.rating*2)/2 ? 'full-star' : i < school.rating+1 ? 'half-star' : 'empty-star'}">
+                                        </span>
+                                        </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <a th:href="@{'/parent/school-detail/' + ${school.schoolEnrollment.school.id} + '#navs-top-rating'}">
+                                                <button  class="btn btn-outline-primary px-4 rounded-sm w-100 ">View Rating Details</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                <!-- Pagination -->
+<nav aria-label="Page navigation example" id="pagination" th:if="${totalPages > 1}">
+    <ul class="pagination justify-content-center">
+      <!-- Previous Button -->
+      <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+        <a class="page-link" 
+           th:data-page="${currentPage -1}"
+           th:href="@{'/admin/users?page=' + (${currentPage} - 1)}">
+           <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+  
+      <!-- First Page - Always show -->
+      <li class="page-item" th:classappend="${currentPage == 1} ? 'active' : ''">
+        <a class="page-link" 
+           th:data-page="1"
+           th:href="@{'/admin/users?page=1}">1</a>
+      </li>
+  
+      <!-- Left Ellipsis -->
+      <li class="page-item disabled" th:if="${currentPage > 3}">
+        <span class="page-link">...</span>
+      </li>
+  
+      <!-- Pages around current -->
+      <th:block th:with="start=${currentPage <=3 ? 2 : currentPage - 2 },
+                        end=${currentPage + 2 < totalPages ? currentPage + 2 : totalPages - 1}">
+        <li class="page-item" 
+            th:each="i : ${#numbers.sequence(start, end)}"
+            th:if="${i > 1 && i < totalPages}"
+            th:classappend="${currentPage == i} ? 'active' : ''">
+          <a class="page-link"
+             th:data-page="${i}"
+             th:href="@{'/admin/users?page=' + ${i} }"
+             th:text="${i}"></a>
+        </li>
+      </th:block>
+  
+      <!-- Right Ellipsis -->
+      <li class="page-item disabled" th:if="${currentPage + 2 < totalPages - 1}">
+        <span class="page-link">...</span>
+      </li>
+  
+      <!-- Last Page - Always show if total pages > 1 -->
+      <li class="page-item" th:if="${totalPages > 1}" 
+          th:classappend="${currentPage == totalPages} ? 'active' : ''">
+        <a class="page-link"
+           th:data-page="${totalPages}"
+           th:href="@{'/admin/users?page=' + ${totalPages}}"
+           th:text="${totalPages}"></a>
+      </li>
+  
+      <!-- Next Button -->
+      <li class="page-item" 
+          th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+        <a class="page-link"
+           th:data-page="${currentPage + 1}"
+           th:href="@{'/admin/users?page=' + (${currentPage} + 1) }">
+           <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+    </div>
+</div>
+</div>
+<!-- Include Rating Modal -->
+<div th:replace="~{pop-up/rating-popup :: rating-modal}"></div>
+<!-- Include View Rating Modal
+<div th:replace="~{pop-up/rating-popup:: view-rating-modal}"></div> -->
+    <!-- Footer -->
+    <footer th:replace=" ~{components/footer::footer}"></footer>
+    <!-- / Footer -->
+                <script src="/assets/js/my-school-list.js"></script>                
+            </body>
+            </html>

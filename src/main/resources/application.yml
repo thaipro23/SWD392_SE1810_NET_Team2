@@ -1,0 +1,43 @@
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  profiles:
+    active:
+      - dev # Change to `prod` when deploying to production
+  application:
+    name: Kindergarten_Suggestion # Change this to your application name
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        '[format_sql]': true
+        '[use_sql_comments]': true
+        '[type]': trace
+  output:
+    ansi:
+      enabled: always
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: thaitxhe173548@fpt.edu.vn
+    password: faqh jqaj plno nobv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+server:
+  error:
+    whitelabel:
+      enabled: false  
+    path: /error
+
+file:
+    upload-dir: ./uploads

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Kindergarten Suggestion | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head th:replace="~{layouts/base::head}"></head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside th:replace="~{components/sidebar::sidebar}"></aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="card layout-page">
+          <!-- Navbar -->
+
+          <div th:replace="~{components/header::header}"></div>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <h4 class="fw-bold py-3 mb-4" style="color: #696cff !important">
+                <a
+                  style="color: #696cff !important"
+                  class="text-muted fw-light"
+                  th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools'}"
+                  >School management ></a
+                >
+                [[${pageTitle}]]
+              </h4>
+
+              <div class="card-header">
+                <h5 class="mb-0">Add new School</h5>
+              </div>
+              <!-- Basic Layout & Basic with Icons -->
+              <div class="row">
+                <div class="mb-4">
+                  <div class="card-body">
+                    <p class="text-success" th:text="${successMessage}"></p>
+                    <form
+                      th:action="${formAction}"
+                      method="post"
+                      class="needs-validation"
+                      novalidate
+                      enctype="multipart/form-data"
+                      th:object="${school}"
+                    >
+                      <!-- School Code -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="school-code"
+                          >School Code</label
+                        >
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            th:field="*{schoolCode}"
+                            id="school-code"
+                            placeholder="Generate by School name"
+                            readonly
+                          />
+                        </div>
+                      </div>
+                      <!-- School Name -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="school-name"
+                          >School Name <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                            id="school-name"
+                            th:field="*{name}"
+                            placeholder="Enter School Name Here..."
+                            required
+                          />
+                          <div
+                            class="invalid-feedback"
+                            th:text="${#fields.hasErrors('name')} ? ${#fields.errors('name')[0]} : 'School Name is required!'"
+                          ></div>
+                        </div>
+                      </div>
+
+                      <!-- School Type -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="school-type"
+                          >School Type <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <select
+                            class="form-select select2-form"
+                            th:classappend="${#fields.hasErrors('schoolType.id')} ? 'is-invalid' : ''"
+                            id="school-type"
+                            th:field="*{schoolType.id}"
+                            required
+                          >
+                            <option value="" selected>
+                              Select a School Type...
+                            </option>
+                            <option
+                              th:each="type : ${schoolTypes}"
+                              th:value="${type.id}"
+                              th:text="${type.name}"
+                            ></option>
+                          </select>
+                          <div
+                            class="invalid-feedback"
+                            th:text="${#fields.hasErrors('schoolType.id')} ? ${#fields.errors('schoolType.id')[0]} : 'School Type is required!'"
+                          ></div>
+                        </div>
+                      </div>
+
+                      <!-- Address -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="address"
+                          >Address <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <div class="input-group has-validation mb-2">
+                            <input
+                              type="text"
+                              class="form-control"
+                              th:classappend="${#fields.hasErrors('Address.detail')} ? 'is-invalid' : ''"
+                              id="address"
+                              th:field="*{Address.detail}"
+                              placeholder="Enter School Address Here..."
+                              required
+                            />
+                            <div
+                              class="invalid-feedback"
+                              th:text="${#fields.hasErrors('Address.detail')} ? ${#fields.errors('Address.detail')[0]} : 'Address is required!'"
+                            ></div>
+                          </div>
+                          <div class="input-group has-validation mb-2">
+                            <select
+                              class="form-select select2-form"
+                              th:classappend="${#fields.hasErrors('Address.province')} ? 'is-invalid' : ''"
+                              id="province-select"
+                              th:field="*{Address.province}"
+                              placeholder="Province/City"
+                              required
+                            >
+                              <option value="" selected>
+                                Select a province/city...
+                              </option>
+                              <option
+                                th:each="province : ${provinces}"
+                                th:value="${province.id}"
+                                th:text="${province.name}"
+                              ></option>
+                            </select>
+                            <div
+                              class="invalid-feedback"
+                              th:text="${#fields.hasErrors('Address.province')} ? ${#fields.errors('Address.province')[0]} : 'Province/City is required!'"
+                            ></div>
+                          </div>
+                          <div class="input-group has-validation mb-2">
+                            <select
+                              class="form-select select2-form"
+                              th:classappend="${#fields.hasErrors('Address.district')} ? 'is-invalid' : ''"
+                              id="district-select"
+                              th:field="*{Address.district}"
+                              placeholder="District"
+                              required
+                            >
+                              <option value="" selected>
+                                Select a district...
+                              </option>
+                              <option
+                                th:each="district : ${districts}"
+                                th:value="${district.id}"
+                                th:text="${district.name}"
+                              ></option>
+                            </select>
+                            <div
+                              class="invalid-feedback"
+                              th:text="${#fields.hasErrors('Address.district')} ? ${#fields.errors('Address.district')[0]} : 'District is required!'"
+                            ></div>
+                          </div>
+                          <select
+                            class="form-select mb-2 select2-form"
+                            th:classappend="${#fields.hasErrors('Address.wards')} ? 'is-invalid' : ''"
+                            id="ward-select"
+                            th:field="*{Address.wards}"
+                            placeholder="Ward"
+                            required
+                          >
+                            <option value="" selected>Select a ward...</option>
+                            <option
+                              th:each="ward : ${wards}"
+                              th:value="${ward.id}"
+                              th:text="${ward.name}"
+                            ></option>
+                          </select>
+                          <div
+                            class="invalid-feedback"
+                            th:text="${#fields.hasErrors('Address.wards')} ? ${#fields.errors('Address.wards')[0]} : 'Ward is required!'"
+                          ></div>
+                          <script src="/assets/js/address.js" defer></script>
+                        </div>
+                      </div>
+
+                      <!-- Email -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="email"
+                          >Email <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <input
+                            type="email"
+                            class="form-control"
+                            th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                            id="email"
+                            th:field="*{email}"
+                            placeholder="Enter School Email Here..."
+                            required
+                          />
+                          <div
+                            class="invalid-feedback"
+                            th:text="${#fields.hasErrors('email')} ? ${#fields.errors('email')[0]} : 'Email is required!'"
+                          ></div>
+                        </div>
+                      </div>
+
+                      <!-- Phone No -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="phone"
+                          >Phone No. <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <input
+                            type="text"
+                            class="form-control"
+                            th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
+                            id="phone"
+                            th:field="*{phone}"
+                            placeholder="Enter phone number here..."
+                            required
+                          />
+                          <div
+                            class="invalid-feedback"
+                            th:text="${#fields.hasErrors('phone')} ? ${#fields.errors('phone')[0]} : 'Phone number is required!'"
+                          ></div>
+                        </div>
+                      </div>
+
+                      <!-- Child Receiving Age -->
+                      <div class="row mb-3">
+                        <label
+                          class="col-sm-2 col-form-label"
+                          for="child-receiving-age"
+                          >Child-receiving age
+                          <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <select
+                            class="form-select select2-form"
+                            th:classappend="${#fields.hasErrors('childAge')} ? 'is-invalid' : ''"
+                            th:field="*{childAge}"
+                            id="child-receiving-age"
+                            required
+                          >
+                            <option value="">
+                              Select a child-receiving age...
+                            </option>
+                            <option
+                              th:each="age : ${childAges}"
+                              th:value="${age.id}"
+                              th:text="${age.name}"
+                            ></option>
+                          </select>
+                          <div
+                            class="invalid-feedback"
+                            th:text="${#fields.hasErrors('childAge')} ? ${#fields.errors('childAge')[0]} : 'Child-receiving age is required!'"
+                          ></div>
+                        </div>
+                      </div>
+
+                      <!-- Education Method -->
+                      <div class="row mb-3">
+                        <label
+                          class="col-sm-2 col-form-label"
+                          for="education-method"
+                          >Education method
+                          <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <select
+                            class="form-select select2-form"
+                            th:classappend="${#fields.hasErrors('educationMethod')} ? 'is-invalid' : ''"
+                            th:field="*{educationMethod}"
+                            id="education-method"
+                            required
+                          >
+                            <option value="">
+                              Select a Education method...
+                            </option>
+                            <option
+                              th:each="method : ${educationMethods}"
+                              th:value="${method.id}"
+                              th:text="${method.name}"
+                            ></option>
+                          </select>
+                          <div
+                            class="invalid-feedback"
+                            th:text="${#fields.hasErrors('educationMethod')} ? ${#fields.errors('educationMethod')[0]} : 'Education method is required!'"
+                          ></div>
+                        </div>
+                      </div>
+
+                      <!-- Fee/Month -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label"
+                          >Fee/month (VND)
+                          <span style="color: red"> *</span></label
+                        >
+                        <div class="col-sm-6">
+                          <div class="row">
+                            <div class="col-sm-2 pe-0 ps-4">
+                              <label class="col-form-label">From</label>
+                            </div>
+                            <div class="col-sm-4">
+                              <input
+                                type="number"
+                                th:field="*{feeFrom}"
+                                class="form-control"
+                                th:classappend="${#fields.hasErrors('feeFrom')} ? 'is-invalid' : ''"
+                                placeholder="From"
+                                required
+                              />
+                              <div
+                                class="invalid-feedback"
+                                th:text="${#fields.hasErrors('feeFrom')} ? ${#fields.errors('feeFrom')[0]} : 'Fee/month is required!'"
+                              ></div>
+                            </div>
+                            <div class="col-sm-2 pe-0 ps-4">
+                              <label class="col-form-label">To</label>
+                            </div>
+                            <div class="col-sm-4">
+                              <input
+                                type="number"
+                                th:field="*{feeTo}"
+                                class="form-control"
+                                th:classappend="${#fields.hasErrors('feeTo')} ? 'is-invalid' : ''"
+                                placeholder="To"
+                                required
+                              />
+                              <div
+                                class="invalid-feedback"
+                                th:text="${#fields.hasErrors('feeTo')} ? ${#fields.errors('feeTo')[0]} : 'Fee/month is required!'"
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Facilities -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label"
+                          >Facilities</label
+                        >
+                        <div class="col-sm-10">
+                          <div class="row">
+                            <div
+                              th:each="facility : ${facilities}"
+                              class="col-sm-4"
+                            >
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  th:field="*{facilities}"
+                                  th:value="${facility.id}"
+                                  th:checked="${facilities.contains(facility)}"
+                                  th:id="${facility.name}"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  th:for="${facility.name}"
+                                  th:text="${facility.name}"
+                                ></label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Utilities -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Utilities</label>
+                        <div class="col-sm-10">
+                          <div class="row">
+                            <div th:each="u : ${utilities}" class="col-sm-4">
+                              <div class="form-check form-check-inline">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  th:field="*{utilities}"
+                                  th:value="${u.id}"
+                                  th:checked="${utilities.contains(u)}"
+                                  th:id="${u.name}"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  th:for="${u.name}"
+                                  th:text="${u.name}"
+                                ></label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- School Introduction -->
+                      <div class="row mb-3">
+                        <label
+                          class="col-sm-2 col-form-label"
+                          for="editor"
+                          >School Introduction</label
+                        >
+                        <div class="col-sm-10">
+                          <textarea
+                            class="form-control"
+                            id="editor"
+                            rows="4"
+                            th:field="*{description}"
+                            placeholder="Enter Text Here..."
+                          ></textarea>
+                        </div>
+                      </div>
+                      <link rel="stylesheet" href="/assets/css/uploadbox.css" />
+                      <!-- School Image -->
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label"
+                          >School Image</label
+                        >
+                        <div class="col-sm-10">
+                          <div class="row">
+                            <div
+                              th:each="image : ${school.images}"
+                              class="col-sm-4"
+                            >
+                              <label>
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  th:field="*{images}"
+                                  th:value="${image}"
+                                  th:name="images"
+                                  checked
+                                  hidden
+                                />
+                                <img
+                                  th:src="${image}"
+                                  class="img-fluid mb-3 thumbnail"
+                                  alt="School Image"
+                                />
+                              </label>
+                            </div>
+                          </div>
+                          <div class="drag-drop-area">
+                            <div class="upload-icon">
+                              <i class="fas fa-images"></i>
+                            </div>
+                            <span class="upload-instructions"></span>
+                            <span class="upload-instructions"
+                              ><span class="file-browse-button"
+                                >Upload a file</span
+                              >
+                              or drag & drop</span
+                            >
+                            <input
+                              type="file"
+                              class="upload-input"
+                              name="imageList"
+                              accept="image/*"
+                              hidden
+                              multiple
+                            />
+                            <span class="file-support-text"
+                              >Supports: JPEG, JPG, PNG</span
+                            >
+                            <span class="file-count"></span>
+                          </div>
+                          <div class="image-preview-container"></div>
+                        </div>
+                      </div>
+
+                      <!-- Buttons -->
+                      <div class="row">
+                        <div class="col d-flex justify-content-end">
+                          <a
+                            type="button"
+                            class="btn btn-outline-primary me-2"
+                            th:href="@{(${currentUser.role.name == 'ADMIN'} ? '/admin' : '/school-owner') + '/schools'}"
+                            >Cancel</a
+                          >
+                          <button
+                            type="submit"
+                            name="action"
+                            value="saved"
+                            class="btn btn-primary me-2"
+                          >
+                            Save draft
+                          </button>
+                          <button
+                            type="submit"
+                            name="action"
+                            value="submit"
+                            class="btn btn-primary"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+            <footer th:replace="~{components/footer::footer}"></footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <script src="/assets/js/uploadbox.js"></script>
+    <script src="/assets/js/add-new-school.js"></script>
+    <script src="/assets/vendor/libs/ckeditor/ckeditor.js"></script>
+    <script src="/assets/js/custom-ckeditor.js"></script>
+  </body>
+</html>

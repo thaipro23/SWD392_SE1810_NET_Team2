@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FAQ Chatbox</title>
+    <style>
+        /* Style cho chatbox */
+        #chatbox {
+            width: 350px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: none;
+            flex-direction: column;
+        }
+        #messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        #faq-list button {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            text-align: left;
+            margin-bottom: 5px;
+            border: none;
+            background: #e6e6e6;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #input-area {
+            padding: 10px;
+            display: flex;
+        }
+        #toggle-chat {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<button id="toggle-chat">Chat</button>
+<div id="chatbox">
+    <div id="messages"></div>
+    <div id="faq-list"></div>
+    <div id="input-area">
+        <input id="user-input" type="text" placeholder="Ask a question..." disabled/>
+    </div>
+</div>
+
+<script>
+    const chatbox = document.getElementById('chatbox');
+    const toggleChatButton = document.getElementById('toggle-chat');
+    const messages = document.getElementById('messages');
+    const faqList = document.getElementById('faq-list');
+
+    // Toggle chatbox
+    toggleChatButton.addEventListener('click', () => {
+        chatbox.style.display = chatbox.style.display === 'flex' ? 'none' : 'flex';
+        loadFAQs();
+    });
+
+    // Load FAQs from the backend
+    async function loadFAQs() {
+        const response = await fetch('/api/faqs'); // Endpoint từ backend
+        const faqs = await response.json();
+        faqList.innerHTML = ''; // Reset danh sách câu hỏi
+        faqs.forEach(faq => {
+            const button = document.createElement('button');
+            button.textContent = faq.question;
+            button.onclick = () => sendQuestion(faq.question, faq.answer);
+            faqList.appendChild(button);
+        });
+    }
+
+    // Simulate sending question and receiving answer
+    function sendQuestion(question, answer) {
+        // Hiển thị câu hỏi người dùng gửi
+        const userMessage = document.createElement('div');
+        userMessage.textContent = `You: ${question}`;
+        userMessage.style.color = 'blue';
+        messages.appendChild(userMessage);
+
+        // Hiển thị câu trả lời
+        const botMessage = document.createElement('div');
+        botMessage.textContent = `Bot: ${answer}`;
+        botMessage.style.color = 'green';
+        messages.appendChild(botMessage);
+
+        // Cuộn xuống cuối
+        messages.scrollTop = messages.scrollHeight;
+    }
+</script>
+</body>
+</html>

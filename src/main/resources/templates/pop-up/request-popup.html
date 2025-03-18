@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body th:fragment="request">
+    <div class="modal fade" id="counselingModal" tabindex="-1" aria-labelledby="counselingModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0">
+                    <h2 class="modal-title m-auto text-dark" id="counselingModalLabel">Request
+                        Counseling</h2>
+                    <div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <div class="modal-body pt-0">
+                    <p class="text-secondary mb-4 text-center text-dark">Please check your details
+                        below and confirm to
+                        submit the request.
+                    </p>
+
+                    <form id="counselingForm" th:object="${request}" th:action="@{/parent/request}" method="post">
+                        <input type="hidden" name="id">
+                        <div class="form-group mb-3 popup">
+                            <label class="mb-1">Full Name</label>
+                            <input type="text" class="form-control custom-bg " id="fullName" th:field="*{fullname}"
+                                placeholder="Enter your full name.." oninput="validateName()">
+                            <span id="nameError" class="invalid-feedback"></span>
+                        </div>
+                        <div class="mb-3 popup">
+                            <label class="mb-1">Email</label>
+                            <input type="email" class="form-control custom-bg " th:field="*{email}" id="email"
+                                placeholder="info@xyz.com" oninput="validateEmail()">
+                            <span id="emailError" class="invalid-feedback"></span>
+                        </div>
+
+                        <div class="mb-3 popup">
+                            <label class="mb-1">Mobile No.</label>
+                            <input type="tel" class="form-control custom-bg " th:field="*{phone}" id="phone"
+                                placeholder="+91 - 98596 58000" oninput="validatePhone()">
+                            <span id="phoneError" class="invalid-feedback"></span>
+                        </div>
+
+                        <div class="mb-4 popup">
+                            <label class="mb-1">Inquiry</label>
+                            <textarea class="form-control custom-bg " rows="3" id="inquiry" th:field="*{inquiry}"
+                                oninput="validateInquiry()" style="height: 150px;" placeholder="Inquiries"></textarea>
+                            <span id="inquiryError" class="invalid-feedback"></span>
+                        </div>
+
+                        <p class="text-secondary small mx-5 text-center">
+                            Our staff will contact you within 24 hrs. If you need urgent assistance,
+                            please contact us
+                            via our hotline
+                            <a href="tel:09123456888" class="text-primary text-decoration-none">09123456888</a>
+                        </p>
+
+                        <div class="d-flex justify-content-between mt-4 mx-5">
+                            <button type="button" class="btn btn-outline-primary px-4" style="width: 150px;"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary px-4 " style="width: 150px;">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

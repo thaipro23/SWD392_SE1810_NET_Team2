@@ -1,0 +1,127 @@
+.main-image {
+  object-fit: cover; 
+  width: 100%; 
+  height: 100%;
+  border: 0.1px solid rgba(0, 0, 0, 0.5);
+}
+
+  .thumbnail {
+    cursor: pointer;
+    transition: opacity 0.3s;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: 0.1px solid rgba(0, 0, 0, 0.5);
+  }
+
+  .thumbnail.selected {
+    outline: 4.5px solid rgb(0,191,255);
+    outline-offset: -4.5px;
+  }
+
+  .navigation-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .nav-button {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+  }
+
+  .nav-button:hover {
+    color: #000;
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 4px;
+  }
+
+  .indicator.active {
+    background-color: #555;
+  }
+
+  .progress-bar-container {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .progress-bar {
+    width: 20%;
+    height: 7px;
+    background-color: lightgray;
+    display: inline-block;
+  }
+  .progress-bar.filled {
+    background-color: gold;
+  }
+
+  .full-star {
+    color: gold;
+  }
+
+  .empty-star {
+    color: #d3d3d3;
+  }
+  .empty-star2 {
+    color: white;
+  }
+
+  .half-star {
+    background: linear-gradient(90deg, gold 50%, #d3d3d3 50%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    line-height: 1em;
+  }
+  .bg-warning-half {
+    background: linear-gradient(90deg, gold 50%, white 50%);
+  }
+
+.thumbnail-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.thumbnail-wrapper {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;  
+}
+
+.thumbnail-wrapper::-webkit-scrollbar {
+  display: none; 
+}
+
+.thumbnail-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px; 
+}
+
+.thumbnail-item {
+  flex: 0 0 auto;
+  width: calc(33.33% - 7px); 
+  cursor: grab; 
+}
+
+.thumbnail-item:active {
+  cursor: grabbing; 
+}
