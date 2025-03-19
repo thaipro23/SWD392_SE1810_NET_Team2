@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed">
+<head th:replace="~{layouts/base::head}"></head>
+<style>
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: ">";
+    }
+</style>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div class="layout-page">
+            <div th:replace="~{components/header-parent::header}"></div>
+            <div class="content-wrapper">
+                <div class="col-xl-8 mx-auto m-5">
+                    <div class="card mb-4">
+                        <h3 class="card-header">Child Note Details</h3>
+                        <div class="card-body">
+                            <!-- Form chọn ngày -->
+                            <form method="get" action="/parent/child-notes" class="mb-4 d-flex align-items-center">
+                                <label for="date" class="me-2">Select Date:</label>
+                                <input type="date" id="date" name="date" th:value="${selectedDate}" class="form-control w-auto me-2">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </form>
+
+                            <!-- Thông báo khi không có ChildNote -->
+                            <div th:if="${error}">
+                                <p th:text="${error}" class="text-danger"></p>
+                            </div>
+
+                            <!-- Hiển thị ChildNote nếu có -->
+                            <div th:if="${childNote}">
+                                <div class="mb-3 row">
+                                    <label class="col-md-2 col-form-label">Student*</label>
+                                    <div class="col-md-10">
+                                        <input th:value="${childNote.student.fullname}" class="form-control" type="text" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-md-2 col-form-label">Description*</label>
+                                    <div class="col-md-10">
+                                        <textarea th:text="${childNote.description}" class="form-control" readonly></textarea>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-md-2 col-form-label">Date Created*</label>
+                                    <div class="col-md-10">
+                                        <input th:value="${#temporals.format(childNote.dateCreate, 'yyyy-MM-dd HH:mm')}" class="form-control" type="text" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 d-flex justify-content-end">
+                                <a href="javascript:history.back()" class="btn btn-outline-primary">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="~{components/footer::footer}"></footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>
