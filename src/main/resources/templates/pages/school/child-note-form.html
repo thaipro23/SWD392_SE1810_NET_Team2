@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed">
+<head th:replace="~{layouts/base::head}"></head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <aside th:replace="~{components/sidebar::sidebar}"></aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="card layout-page">
+            <!-- Navbar -->
+
+            <div th:replace="~{components/header::header}"></div>
+
+            <div class="content-wrapper">
+                <div class="col-xl-8 mx-auto m-5">
+                    <div class="card mb-4">
+                        <h3 class="card-header">Child Note Form</h3>
+                        <div class="card-body">
+                            <form th:action="@{/teacher/child-notes/save}" method="post" th:object="${childNote}">
+                                <input type="hidden" th:field="*{id}">
+
+                                <!-- Chọn học sinh -->
+                                <div class="mb-3 row">
+                                    <label class="col-md-2 col-form-label">Student*</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control" th:field="*{student}">
+                                            <option th:each="child : ${children}"
+                                                    th:value="${child.id}"
+                                                    th:text="${child.fullName}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Mô tả ghi chú -->
+                                <div class="mb-3 row">
+                                    <label class="col-md-2 col-form-label">Description*</label>
+                                    <div class="col-md-10">
+                                        <textarea th:field="*{description}" class="form-control" required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <a href="javascript:history.back()" class="btn btn-outline-secondary ms-2">Back</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="~{components/footer::footer}"></footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>

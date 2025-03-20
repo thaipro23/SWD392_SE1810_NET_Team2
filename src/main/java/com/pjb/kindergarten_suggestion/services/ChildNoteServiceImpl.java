@@ -16,7 +16,28 @@ import java.util.Optional;
 public class ChildNoteServiceImpl implements ChildNoteService {
     private final ChildNoteRepositoty childNoteRepository;
 
+    public List<ChildNote> findByTeacher(Long teacherId) {
+        return childNoteRepository.findByUser_Id(teacherId);
+    }
+    @Override
+    public List<ChildNote> findByTeacherAndDate(Long teacherId, LocalDate date) {
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+        return childNoteRepository.findByUser_IdAndDateCreateBetween(teacherId, startOfDay, endOfDay);
+    }
 
+
+    public ChildNote findById(Long id) {
+        return childNoteRepository.findById(id).orElse(null);
+    }
+
+    public void save(ChildNote childNote) {
+        childNoteRepository.save(childNote);
+    }
+
+    public void delete(Long id) {
+        childNoteRepository.deleteById(id);
+    }
     @Override
     public Optional<ChildNote> findByDate(LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
