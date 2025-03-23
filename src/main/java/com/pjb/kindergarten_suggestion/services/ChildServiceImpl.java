@@ -17,7 +17,7 @@ public class ChildServiceImpl implements ChildService {
 
     @Override
     public List<Child> findByUser(Long userId) {
-        return childRepository.findByUser_Id(userId);
+        return childRepository.findByTeacher_Id(userId);
     }
     public List<Child> findByUserAndNotEvaluatedToday(Long userId) {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
