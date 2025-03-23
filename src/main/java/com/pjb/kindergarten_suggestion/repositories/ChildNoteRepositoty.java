@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChildNoteRepositoty extends JpaRepository<ChildNote, Long> {
-    Optional<ChildNote> findByDateCreateBetweenAndParent_Id(LocalDateTime start, LocalDateTime end, Long id);
+    Optional<ChildNote> findByDateCreateBetweenAndUser_Id(LocalDateTime start, LocalDateTime end, Long id);
     List<ChildNote> findByUser_Id(Long userId);
     List<ChildNote> findByUser_IdAndDateCreateBetween(Long userId, LocalDateTime start, LocalDateTime end);
 
