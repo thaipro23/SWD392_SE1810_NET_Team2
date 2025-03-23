@@ -1,6 +1,7 @@
 package com.pjb.kindergarten_suggestion.services;
 
 import com.pjb.kindergarten_suggestion.entities.ChildNote;
+import com.pjb.kindergarten_suggestion.entities.Parent;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,5 +14,5 @@ public interface ChildNoteService {
     ChildNote findById(Long id);
     void save(ChildNote childNote);
     void delete(Long id);
-    Optional<ChildNote> findByDate(LocalDate date);
+     Optional<ChildNote> findByDateAndParent(LocalDate date, Long id);
 }

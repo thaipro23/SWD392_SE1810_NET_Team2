@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ChildService {
     List<Child> findByUser(Long userId);
+    List<Child> findByUserAndNotEvaluatedToday(Long userId);
 }

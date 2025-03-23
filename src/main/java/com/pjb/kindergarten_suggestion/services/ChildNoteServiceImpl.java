@@ -1,6 +1,7 @@
 package com.pjb.kindergarten_suggestion.services;
 
 import com.pjb.kindergarten_suggestion.entities.ChildNote;
+import com.pjb.kindergarten_suggestion.entities.Parent;
 import com.pjb.kindergarten_suggestion.repositories.ChildNoteRepositoty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,9 +40,9 @@ public class ChildNoteServiceImpl implements ChildNoteService {
         childNoteRepository.deleteById(id);
     }
     @Override
-    public Optional<ChildNote> findByDate(LocalDate date) {
+    public Optional<ChildNote> findByDateAndParent(LocalDate date, Long id) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
-        return childNoteRepository.findByDateCreateBetween(startOfDay, endOfDay);
+        return childNoteRepository.findByDateCreateBetweenAndParent_Id(startOfDay, endOfDay, id);
     }
 }

@@ -52,7 +52,7 @@ public class ChildNoteTeacherController {
 
     @GetMapping("/create")
     public String createChildNoteForm(@AuthenticationPrincipal User teacher, Model model) {
-        List<Child> children = childService.findByUser(teacher.getId());
+        List<Child> children = childService.findByUserAndNotEvaluatedToday(teacher.getId());
         model.addAttribute("childNote", new ChildNote());
         model.addAttribute("children", children);
         return "pages/school/child-note-form";
