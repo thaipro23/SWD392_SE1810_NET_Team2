@@ -1,13 +1,20 @@
 # Database configuration
 spring:
   datasource:
-    url: jdbc:<your-database-driver>://<your-database-host>:<your-database-port>/<your-database-name>?useUnicode=true&characterEncoding=utf-8
-    username: <your-database-username>
-    password: <your-database-password>
-
-# Initial admin configuration (an admin will be inserted into the database when the application starts)
+    url: jdbc:mysql://localhost:3306/demoProject?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql: true
+  # Initial admin configuration (an admin will be inserted into the database when the application starts)
   security:
     user:
-      name: <your-admin-username>
-      email: <your-admin-email>
-      password: <your-admin-password>
+      name: admin
+      password: admin
+      email: admin@admin.com

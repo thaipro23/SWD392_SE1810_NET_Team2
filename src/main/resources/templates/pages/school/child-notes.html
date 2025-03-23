@@ -47,8 +47,8 @@
                                         <td th:text="${childNote.description}"></td>
                                         <td th:text="${#temporals.format(childNote.dateCreate, 'yyyy-MM-dd HH:mm')}"></td>
                                         <td>
-                                            <a th:href="@{/teacher/child-notes/{id}(id=${childNote.id})/edit}" class="btn btn-warning btn-sm">Edit</a>
-                                            <a th:href="@{/teacher/child-notes/{id}(id=${childNote.id})/delete}" class="btn btn-danger btn-sm"
+                                            <a th:href="@{/teacher/child-notes/{id}/edit(id=${childNote.id})}" class="btn btn-warning btn-sm">Edit</a>
+                                            <a th:href="@{/teacher/child-notes/{id}/delete(id=${childNote.id})}" class="btn btn-danger btn-sm"
                                                onclick="return confirm('Are you sure you want to delete this note?')">Delete</a>
                                         </td>
                                     </tr>

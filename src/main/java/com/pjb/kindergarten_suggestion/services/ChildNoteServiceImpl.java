@@ -43,6 +43,6 @@ public class ChildNoteServiceImpl implements ChildNoteService {
     public Optional<ChildNote> findByDateAndParent(LocalDate date, Long id) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
-        return childNoteRepository.findByDateCreateBetweenAndUser_Id(startOfDay, endOfDay, id);
+        return childNoteRepository.findByDateCreateBetweenAndParentId(startOfDay, endOfDay, id);
     }
 }

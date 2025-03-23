@@ -63,7 +63,7 @@ public class ChildNoteTeacherController {
         childNote.setUser(teacher);
         childNote.setDateCreate(LocalDateTime.now());
         childNoteService.save(childNote);
-        return "redirect:/school/child-notes";
+        return "redirect:/teacher/child-notes";
     }
 
     @GetMapping("/{id}/edit")
@@ -78,12 +78,12 @@ public class ChildNoteTeacherController {
         return "pages/school/child-note-form";
     }
 
-    @PostMapping("/{id}/delete")
+    @GetMapping("/{id}/delete")
     public String deleteChildNote(@PathVariable Long id, @AuthenticationPrincipal User teacher) {
         ChildNote childNote = childNoteService.findById(id);
         if (childNote != null && childNote.getUser().getId().equals(teacher.getId())) {
             childNoteService.delete(id);
         }
-        return "redirect:/school/child-notes";
+        return "redirect:/teacher/child-notes";
     }
 }

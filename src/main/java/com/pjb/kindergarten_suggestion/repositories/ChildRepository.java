@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChildRepository extends JpaRepository<Child, Long> {
-    List<Child> findByUser_Id(Long userId);
-    @Query("SELECT c FROM Child c WHERE c.user.id = :userId AND " +
+    List<Child> findByTeacher_Id(Long userId);
+    @Query("SELECT c FROM Child c WHERE c.teacher.id = :userId AND " +
             "NOT EXISTS (SELECT cn FROM ChildNote cn WHERE cn.student.id = c.id AND " +
             "cn.dateCreate BETWEEN :startOfDay AND :endOfDay)")
     List<Child> findByUserIdAndNotEvaluatedToday(@Param("userId") Long userId,

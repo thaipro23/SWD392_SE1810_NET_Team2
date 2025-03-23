@@ -25,9 +25,9 @@ public class Child {
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
-    private Parent parent;
+    private User parent;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private User teacher;
 }
