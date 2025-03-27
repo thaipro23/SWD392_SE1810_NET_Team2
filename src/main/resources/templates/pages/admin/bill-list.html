@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed">
+<head th:replace="~{layouts/base::head}"></head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <div class="layout-page">
+      <div th:replace="~{components/header-parent::header}"></div>
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <h4 class="fw-bold py-3 mb-4">My Bills</h4>
+
+          <!-- Form lọc theo ngày -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <form method="get" action="/parent/bills" class="d-flex align-items-center">
+                <label for="date" class="me-2">Filter by Date:</label>
+                <input type="date" id="date" name="date" th:value="${selectedDate}" class="form-control w-auto me-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="/parent/bills" class="btn btn-outline-secondary ms-2">Clear</a>
+              </form>
+            </div>
+          </div>
+
+          <!-- Danh sách hóa đơn -->
+          <div class="card">
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Child</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Created Date</th>
+                  <th>End Date</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${bills.empty}">
+                  <td colspan="8" class="text-center">No bills found</td>
+                </tr>
+                <tr th:each="bill : ${bills}">
+                  <td th:text="${bill.id}"></td>
+                  <td th:text="${bill.child.fullName}"></td>
+                  <td th:text="${bill.description}"></td>
+                  <td th:text="${bill.amount}"></td>
+                  <td>
+                    <span th:if="${bill.status.name == 'Unpaid'}" class="badge bg-warning">Unpaid</span>
+                    <span th:if="${bill.status.name == 'Paid'}" class="badge bg-success">Paid</span>
+                  </td>
+                  <td th:text="${#temporals.format(bill.dateCreate, 'yyyy-MM-dd HH:mm')}"></td>
+                  <td th:text="${bill.endDate != null ? #temporals.format(bill.endDate, 'yyyy-MM-dd HH:mm') : 'N/A'}"></td>
+                  <td>
+                    <a th:href="@{/admin/bills/{id}(id=${bill.id})}" class="btn btn-sm btn-info">View</a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

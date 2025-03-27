@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en" class="light-style layout-menu-fixed">
+<head th:replace="~{layouts/base::head}"></head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <div class="layout-page">
+<!--      <div th:replace="~{components/header-admin::header}"></div>-->
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <h4 class="fw-bold py-3 mb-4">Create New Bill</h4>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <form th:action="@{/admin/bills/create}" method="post" th:object="${billChild}">
+                    <div class="mb-3 row">
+                      <label class="col-md-2 col-form-label">Student*</label>
+                      <div class="col-md-10">
+                        <select class="form-select" th:field="*{child.id}" required id="childSelect">
+                          <option value="">Chọn học sinh</option>
+                          <option th:each="childs : ${child}"
+                                  th:value="${childs.id}"
+                                  th:text="${childs.fullName}"></option>
+                        </select>
+
+
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-md-2 col-form-label">Parent</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" id="parentName" readonly>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-md-2 col-form-label">Description*</label>
+                      <div class="col-md-10">
+                        <textarea class="form-control" th:field="*{description}" required></textarea>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-md-2 col-form-label">Amount*</label>
+                      <div class="col-md-10">
+                        <input type="number" class="form-control" th:field="*{amount}" required step="0.01">
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-md-2 col-form-label">End Date</label>
+                      <div class="col-md-10">
+                        <input type="datetime-local" class="form-control" th:field="*{endDate}">
+                      </div>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end">
+                      <a th:href="@{/admin/bills}" class="btn btn-outline-secondary me-2">Cancel</a>
+                      <button type="submit" class="btn btn-primary">Create Bill</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('childSelect').addEventListener('change', function() {
+    const childId = this.value;
+    if (childId) {
+      fetch(`/admin/bills/child/${childId}`)
+              .then(response => response.json())
+              .then(parent => {
+                document.getElementById('parentName').value = parent.fullname;
+              });
+    } else {
+      document.getElementById('parentName').value = '';
+    }
+  });
+</script>
+</body>
+</html>

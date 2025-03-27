@@ -24,4 +24,18 @@ public class ChildServiceImpl implements ChildService {
         LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
         return childRepository.findByUserIdAndNotEvaluatedToday(userId, startOfDay, endOfDay);
     }
+    @Override
+    public List<Child> findAll() {
+
+        List<Child> children = childRepository.findAll();
+
+        return children;
+    }
+    @Override
+    public Child findById(Long id) {
+
+        Child child = childRepository.findById(id).orElse(null);
+
+        return child;
+    }
 }

@@ -9,25 +9,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
+@Setter
+@Getter
+@Table(name = "child") // Đảm bảo tên bảng đúng
 public class Child {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "full_name", nullable = false, length = 20) // Xác định tên cột chính xác
     private String fullName;
 
-    @Column(length = 100)
+    @Column(name = "student_information", length = 100) // Xác định tên cột chính xác
     private String studentInformation;
 
-    @Column(nullable = false)
+    @Column(name = "dob", nullable = false) // Xác định tên cột chính xác
     private LocalDateTime dob;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id", nullable = false)
+    @JoinColumn(name = "parent_id", nullable = false) // Đảm bảo tên khóa ngoại đúng
     private User parent;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @JoinColumn(name = "teacher_id", nullable = false) // Đảm bảo tên khóa ngoại đúng
     private User teacher;
 }
